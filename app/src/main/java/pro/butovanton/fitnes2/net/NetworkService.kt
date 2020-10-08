@@ -2,6 +2,7 @@ package pro.butovanton.fitness.net
 
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
+import pro.butovanton.fitnes2.net.UnsafeOkHttpClient
 import pro.butovanton.fitness.net.JSONPlaceHolderApi
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
@@ -26,7 +27,8 @@ class NetworkService private constructor() {
     init {
         val interceptor = HttpLoggingInterceptor()
         interceptor.setLevel(HttpLoggingInterceptor.Level.BODY)
-        val client = OkHttpClient.Builder()
+         // val client = OkHttpClient.Builder()
+          val client = UnsafeOkHttpClient.getUnsafeOkHttpClient()
                 .addInterceptor(interceptor)
         mRetrofit = Retrofit.Builder()
                 .baseUrl(BASE_URL)

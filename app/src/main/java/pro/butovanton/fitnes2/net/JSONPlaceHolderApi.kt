@@ -2,6 +2,7 @@ package pro.butovanton.fitness.net
 
 import kotlinx.coroutines.flow.Flow
 import okhttp3.ResponseBody
+import pro.butovanton.fitnes2.net.responses.AlertResponse
 import retrofit2.Call
 import retrofit2.http.*
 
@@ -12,6 +13,6 @@ interface JSONPlaceHolderApi {
     }
 
     @GET("/v1/alerts/{GUID}")
-    fun alert(@Path ("GUID") guid: String) : Call<ResponseBody>
+    fun alert(@Path ("GUID") guid: String) : Call<List<AlertResponse>>
 
 }

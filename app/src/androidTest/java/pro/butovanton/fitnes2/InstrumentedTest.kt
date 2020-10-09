@@ -1,5 +1,6 @@
 package pro.butovanton.fitnes2
 
+import android.util.Log
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import kotlinx.coroutines.*
@@ -10,6 +11,7 @@ import org.junit.runner.RunWith
 
 import org.junit.Assert.*
 import pro.butovanton.fitness.net.Api
+import pro.butovanton.fitness.net.JSONPlaceHolderApi
 import java.util.concurrent.CountDownLatch
 
 /**
@@ -19,15 +21,19 @@ import java.util.concurrent.CountDownLatch
  */
 @RunWith(AndroidJUnit4::class)
 class InstrumentedTest {
-    val api = Api()
+    var api = Api()
 
     @Test
-    fun allertApi() {
+    fun alert() {
+        runBlocking {
+            try {
+                val response = api.alert()
+                Log.d("DEBUG", "AllertRespose = " + response.toString())
+            }
+            catch (t: Throwable) {
+                Log.d("DEBUG", "Exeption = " + t.message)
+            }
 
-        val countAlert = CountDownLatch(1)
-        api.alert()
-
-        countAlert.await()
-
+        }
     }
 }

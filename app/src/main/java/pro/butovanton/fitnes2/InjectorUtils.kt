@@ -17,27 +17,18 @@
 package pro.butovanton.fitnes2
 
 import android.content.Context
+import pro.butovanton.fitness.net.Api
 import pro.butovanton.fitness.net.JSONPlaceHolderApi
 import pro.butovanton.fitness.net.NetworkService
 
 object InjectorUtils {
 
-    fun provideApi() : JSONPlaceHolderApi {
+    fun provideApi() : Api {
+        return Api(provideJSONPlaceHolderApi())
+    }
+
+    private fun provideJSONPlaceHolderApi() : JSONPlaceHolderApi {
         return NetworkService.instance!!.jSONApi!!
     }
-/*
-    fun provideDb(context: Context) : AppDatabase {
-       return AppDatabase.createBd(context)
-    }
 
-    fun provideRepo(context: Context): Repo {
-        return Repo.get(provideDb(context).getDao())
-    }
-
-    fun provideInteractor(context: Context): Interactor {
-       return Interactor.get(provideRepo(context))
-    }
-
-
- */
 }

@@ -20,13 +20,11 @@ import kotlin.coroutines.resumeWithException
 import kotlin.coroutines.suspendCoroutine
 
 
-class Api {
+class Api(val jSONPlaceHolderApi : JSONPlaceHolderApi ) {
 
-    var api = InjectorUtils.provideApi()
-
-   suspend fun alert() : List<AlertResponse>?  {
+   suspend fun alert(guid : String) : List<AlertResponse>?  {
       return suspendCoroutine {cont ->
-          api.alert(JSONPlaceHolderApi.GUID).enqueue(object : Callback<List<AlertResponse>> {
+          jSONPlaceHolderApi.alert(guid).enqueue(object : Callback<List<AlertResponse>> {
               override fun onResponse( call: Call<List<AlertResponse>>, response: Response<List<AlertResponse>>
               ) {
                   Log.d("DEBUG", "Retrofit response : " + response.toString())

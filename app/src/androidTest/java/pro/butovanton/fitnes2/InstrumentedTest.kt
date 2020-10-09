@@ -21,19 +21,20 @@ import java.util.concurrent.CountDownLatch
  */
 @RunWith(AndroidJUnit4::class)
 class InstrumentedTest {
-    var api = Api()
+    var api = InjectorUtils.provideApi()
 
     @Test
     fun alert() {
         runBlocking {
             try {
-                val response = api.alert()
+                val response = api.alert(JSONPlaceHolderApi.GUID)
+                assertNotNull(response)
                 Log.d("DEBUG", "AllertRespose = " + response.toString())
             }
             catch (t: Throwable) {
+                assertNotNull(t)
                 Log.d("DEBUG", "Exeption = " + t.message)
             }
-
         }
     }
 }

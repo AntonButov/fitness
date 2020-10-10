@@ -46,10 +46,10 @@ class HomeFragment : Fragment() {
                 }
             }
 
-            lifecycleScope.launchWhenCreated {
-                model.serverAvial().collect {  serverAvial ->
+            model.getServerAvial().observe(viewLifecycleOwner , object : Observer<Boolean> {
+                override fun onChanged(serverAvial: Boolean?) {
                     var imageServerAvial = 0
-                    if (serverAvial)
+                    if (serverAvial != null && serverAvial)
                         imageServerAvial = R.drawable.greencircle
                     else
                         imageServerAvial = R.drawable.redcircle
@@ -58,7 +58,7 @@ class HomeFragment : Fragment() {
                         .load(imageServerAvial)
                         .into(serverAvialIV);
                 }
-        }
+            })
 
         return root
     }

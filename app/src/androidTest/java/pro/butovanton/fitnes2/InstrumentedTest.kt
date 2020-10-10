@@ -1,5 +1,6 @@
 package pro.butovanton.fitnes2
 
+import android.content.Context
 import android.util.Log
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.ext.junit.runners.AndroidJUnit4
@@ -36,5 +37,15 @@ class InstrumentedTest {
                 Log.d("DEBUG", "Exeption = " + t.message)
             }
         }
+    }
+
+
+
+    @Test
+    fun getBataryPercent() {
+    val batary = InjectorUtils.provideBatary()
+    var appContext: Context = InstrumentationRegistry.getInstrumentation().targetContext
+    val bataryPercent = batary.getBatteryPercentage(appContext)
+    assertNotNull(bataryPercent)
     }
 }

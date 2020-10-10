@@ -36,16 +36,6 @@ class HomeFragment : Fragment() {
 
         val root = inflater.inflate(R.layout.fragment_home, container, false)
 
-            timerTV = root.findViewById(R.id.timerTV)
-            lifecycleScope.launchWhenCreated {
-                while (true) {
-                    val sdf = SimpleDateFormat("HH:mm")
-                    val currentDate = sdf.format(Date())
-                    timerTV.text = currentDate
-                    delay(1000)
-                }
-            }
-
             model.getServerAvial().observe(viewLifecycleOwner , object : Observer<Boolean> {
                 override fun onChanged(serverAvial: Boolean?) {
                     var imageServerAvial = 0
@@ -60,6 +50,27 @@ class HomeFragment : Fragment() {
                 }
             })
 
+        timerTV = root.findViewById(R.id.timerTV)
+
         return root
+    }
+
+    override fun onResume() {
+        super.onResume()
+        lifecycleScope.launchWhenResumed {
+            while (true) {
+                chargeTV.text = model.getBataryPercent().toString() + "%"
+                delay(60000)
+            }
+        }
+
+        lifecycleScope.launchWhenResumed {
+            while (true) {
+                val sdf = SimpleDateFormat("HH:mm")
+                val currentDate = sdf.format(Date())
+                timerTV.text = currentDate
+                delay(1000)
+            }
+        }
     }
 }

@@ -9,6 +9,7 @@ import android.os.IBinder
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import pro.butovanton.fitnes2.InjectorUtils
 import pro.butovanton.fitnes2.MService
 import pro.butovanton.fitnes2.MService.LocalBinder
 import pro.butovanton.fitnes2.ReportToModel
@@ -17,9 +18,10 @@ import pro.butovanton.fitness.net.JSONPlaceHolderApi
 
 class HomeViewModel(application: Application) : AndroidViewModel(application), ReportToModel {
 
-    lateinit var mService : MService
-    var mBound = false
+    private lateinit var mService : MService
+    private var mBound = false
     val serverAvialLive : MutableLiveData<Boolean> = MutableLiveData()
+    private val mapplication = application
 
     private val mConnection: ServiceConnection = object : ServiceConnection {
         override fun onServiceConnected(
@@ -51,6 +53,12 @@ class HomeViewModel(application: Application) : AndroidViewModel(application), R
 
     override fun serverAvial(sevrerAvial: Boolean) {
         serverAvialLive.value = sevrerAvial
+    }
+
+    val batary = InjectorUtils.provideBatary()
+
+    fun getBataryPercent() : Int {
+        return batary.getBatteryPercentage(mapplication)
     }
 }
 

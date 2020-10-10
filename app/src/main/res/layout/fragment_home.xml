@@ -7,6 +7,29 @@
     tools:context=".ui.home.HomeFragment">
 
     <TextView
+        android:id="@+id/TextViewCharge"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="32dp"
+        android:layout_marginLeft="32dp"
+        android:layout_marginTop="100dp"
+        android:text="Заряд: "
+        android:textSize="24dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/timerTV" />
+
+    <TextView
+        android:id="@+id/chargeTV"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="32dp"
+        android:layout_marginRight="32dp"
+        android:text="100%"
+        android:textSize="24dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/TextViewCharge" />
+
+    <TextView
         android:id="@+id/timerTV"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -25,11 +48,11 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="32dp"
         android:layout_marginLeft="32dp"
-        android:layout_marginTop="200dp"
+        android:layout_marginTop="16dp"
         android:text="Связь с сервером: "
         android:textSize="24dp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/timerTV" />
+        app:layout_constraintTop_toBottomOf="@+id/TextViewCharge" />
 
     <ImageView
         android:id="@+id/serverAvialIV"

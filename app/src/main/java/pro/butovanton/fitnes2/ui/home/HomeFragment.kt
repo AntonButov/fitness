@@ -1,24 +1,25 @@
 package pro.butovanton.fitnes2.ui.home
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
+import android.widget.ImageButton
 import android.widget.TextView
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.lifecycle.lifecycleScope
 import com.bumptech.glide.Glide
 import kotlinx.android.synthetic.main.fragment_home.*
-import kotlinx.coroutines.*
-import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.InternalCoroutinesApi
+import kotlinx.coroutines.delay
+import pro.butovanton.fitnes2.MainActivity
 import pro.butovanton.fitnes2.R
 import java.text.SimpleDateFormat
 import java.util.*
+
 
 class HomeFragment : Fragment() {
 
@@ -39,19 +40,25 @@ class HomeFragment : Fragment() {
             model.getServerAvial().observe(viewLifecycleOwner , object : Observer<Boolean> {
                 override fun onChanged(serverAvial: Boolean?) {
                     var imageServerAvial = 0
-                    if (serverAvial != null && serverAvial)
-                        imageServerAvial = R.drawable.greencircle
-                    else
-                        imageServerAvial = R.drawable.redcircle
+                    if (serverAvial != null) {
+                        if (serverAvial)
+                            imageServerAvial = R.drawable.greencircle
+                        else
+                            imageServerAvial = R.drawable.redcircle
                     Glide
                         .with(this@HomeFragment)
                         .load(imageServerAvial)
                         .into(serverAvialIV);
+                    }
                 }
             })
 
         timerTV = root.findViewById(R.id.timerTV)
 
+        val menuIB = root.findViewById<ImageButton>(R.id.menuIB)
+        menuIB.setOnClickListener {
+            (activity as MainActivity).drawer.open()
+        }
         return root
     }
 

@@ -11,6 +11,7 @@ import pro.butovanton.fitness.net.JSONPlaceHolderApi
 class MService : Service() {
 
     var reportToModel : ReportToModel? = null
+        set(value) { field = value }
     private val mBinder: IBinder = LocalBinder()
     lateinit var job : Job
 

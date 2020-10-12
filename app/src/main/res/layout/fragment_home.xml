@@ -10,8 +10,8 @@
         android:id="@+id/TextViewCharge"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="32dp"
-        android:layout_marginLeft="32dp"
+        android:layout_marginStart="@dimen/def_interval"
+        android:layout_marginLeft="@dimen/def_interval"
         android:layout_marginTop="100dp"
         android:text="Заряд: "
         android:textSize="24dp"
@@ -22,8 +22,8 @@
         android:id="@+id/chargeTV"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="32dp"
-        android:layout_marginRight="32dp"
+        android:layout_marginEnd="@dimen/def_interval"
+        android:layout_marginRight="@dimen/def_interval"
         android:text="100%"
         android:textSize="24dp"
         app:layout_constraintEnd_toEndOf="parent"
@@ -33,14 +33,12 @@
         android:id="@+id/timerTV"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="50dp"
-        android:layout_marginEnd="8dp"
+        android:layout_marginStart="@dimen/def_interval"
+        android:layout_marginTop="100dp"
         android:textAlignment="center"
         android:textSize="60dp"
-        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/menuIB" />
 
     <TextView
         android:id="@+id/textViewServerAvial"
@@ -56,13 +54,25 @@
 
     <ImageView
         android:id="@+id/serverAvialIV"
-        android:layout_width="30dp"
-        android:layout_height="30dp"
-        android:layout_marginEnd="32dp"
-        android:layout_marginRight="32dp"
+        android:layout_width="@dimen/def_interval"
+        android:layout_height="@dimen/def_interval"
+        android:layout_marginEnd="@dimen/def_interval"
+        android:layout_marginRight="@dimen/def_interval"
         app:layout_constraintBottom_toBottomOf="@+id/textViewServerAvial"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@+id/textViewServerAvial"
         />
+
+    <ImageButton
+        android:id="@+id/menuIB"
+        android:layout_width="@dimen/def_interval"
+        android:layout_height="@dimen/def_interval"
+        android:layout_marginStart="@dimen/def_interval"
+        android:layout_marginLeft="@dimen/def_interval"
+        android:layout_marginTop="@dimen/def_interval"
+        android:background="@drawable/menu"
+
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

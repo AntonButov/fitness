@@ -16,7 +16,6 @@
 
 package pro.butovanton.fitnes2
 
-import android.content.Context
 import pro.butovanton.fitness.net.Api
 import pro.butovanton.fitness.net.JSONPlaceHolderApi
 import pro.butovanton.fitness.net.NetworkService

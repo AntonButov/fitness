@@ -8,11 +8,11 @@ android {
 
     defaultConfig {
         applicationId "pro.butovanton.fitnes2"
-        minSdkVersion 16
+        minSdkVersion 19
         targetSdkVersion 30
         versionCode 1
         versionName "1.0"
-
+        multiDexEnabled true
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
@@ -73,7 +73,9 @@ dependencies {
     //RxAndroidBle
     implementation 'com.polidea.rxandroidble2:rxandroidble:1.11.0'
     //lib core function
-    implementation(name: 'libraryCore_v1.0.5', ext: 'aar')
+    implementation(name: 'libraryCore_v1.0.7', ext: 'aar')
     //lib dfu function. Optional. If your app need dfu function.
     implementation(name: 'libraryDfu_v1.0.1', ext: 'aar')
+
+    implementation 'com.android.support:multidex:1.0.3'
 }

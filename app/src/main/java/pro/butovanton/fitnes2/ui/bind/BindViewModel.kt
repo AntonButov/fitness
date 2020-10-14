@@ -1,10 +1,10 @@
-package pro.butovanton.fitnes2.ui.gallery
+package pro.butovanton.fitnes2.ui.bind
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 
-class GalleryViewModel : ViewModel() {
+class BindViewModel : ViewModel() {
 
     private val _text = MutableLiveData<String>().apply {
         value = "This is gallery Fragment"

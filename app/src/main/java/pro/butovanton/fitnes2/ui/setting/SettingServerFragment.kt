@@ -1,4 +1,4 @@
-package pro.butovanton.fitnes2.ui.slideshow
+package pro.butovanton.fitnes2.ui.setting
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -10,7 +10,7 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import pro.butovanton.fitnes2.R
 
-class SlideshowFragment : Fragment() {
+class SettingServerFragment : Fragment() {
 
     private lateinit var infoViewModel: InfoViewModel
 
@@ -21,7 +21,7 @@ class SlideshowFragment : Fragment() {
     ): View? {
         infoViewModel =
                 ViewModelProviders.of(this).get(InfoViewModel::class.java)
-        val root = inflater.inflate(R.layout.fragment_slideshow, container, false)
+        val root = inflater.inflate(R.layout.fragment_setting_server, container, false)
         val textView: TextView = root.findViewById(R.id.text_slideshow)
         infoViewModel.text.observe(viewLifecycleOwner, Observer {
             textView.text = it

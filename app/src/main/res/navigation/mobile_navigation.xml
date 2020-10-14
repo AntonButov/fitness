@@ -8,18 +8,24 @@
     <fragment
         android:id="@+id/nav_home"
         android:name="pro.butovanton.fitnes2.ui.home.HomeFragment"
-        android:label="@string/menu_home"
+        android:label="@string/menu_bind"
         tools:layout="@layout/fragment_home" />
 
     <fragment
         android:id="@+id/nav_gallery"
         android:name="pro.butovanton.fitnes2.ui.gallery.GalleryFragment"
-        android:label="@string/menu_gallery"
+        android:label="@string/menu_setting_server"
         tools:layout="@layout/fragment_gallery" />
 
     <fragment
         android:id="@+id/nav_slideshow"
         android:name="pro.butovanton.fitnes2.ui.slideshow.SlideshowFragment"
-        android:label="@string/menu_slideshow"
+        android:label="@string/menu_log"
         tools:layout="@layout/fragment_slideshow" />
+
+    <fragment
+        android:id="@+id/nav_info"
+        android:name="pro.butovanton.fitnes2.ui.slideshow.InfoFragment"
+        android:label="@string/menu_log"
+        tools:layout="@layout/fragment_info" />
 </navigation>

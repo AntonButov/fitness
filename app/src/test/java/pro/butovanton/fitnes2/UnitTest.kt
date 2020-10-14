@@ -13,15 +13,5 @@ import java.util.concurrent.CountDownLatch
  */
 class UnitTest {
 
-    val api = Api()
 
-    @Test
-    fun allertApi() {
-
-        val countAlert = CountDownLatch(1)
-        api.alert()
-
-        countAlert.await()
-
-    }
 }

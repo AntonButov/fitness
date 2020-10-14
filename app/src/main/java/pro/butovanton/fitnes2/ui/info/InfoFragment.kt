@@ -10,7 +10,7 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import pro.butovanton.fitnes2.R
 
-class SlideshowFragment : Fragment() {
+class InfoFragment : Fragment() {
 
     private lateinit var infoViewModel: InfoViewModel
 
@@ -21,11 +21,8 @@ class SlideshowFragment : Fragment() {
     ): View? {
         infoViewModel =
                 ViewModelProviders.of(this).get(InfoViewModel::class.java)
-        val root = inflater.inflate(R.layout.fragment_slideshow, container, false)
-        val textView: TextView = root.findViewById(R.id.text_slideshow)
-        infoViewModel.text.observe(viewLifecycleOwner, Observer {
-            textView.text = it
-        })
+        val root = inflater.inflate(R.layout.fragment_info, container, false)
+
         return root
     }
 }

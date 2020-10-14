@@ -22,5 +22,19 @@
         </activity>
         <service android:name=".MService" />
     </application>
+
+    <!--In most cases, you need to ensure that the device supports BLE.-->
+    <uses-feature
+        android:name="android.hardware.bluetooth_le"
+        android:required="true"/>
+
+    <uses-permission android:name="android.permission.BLUETOOTH"/>
+    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN"/>
+
+    <!--Android 6.0 and above. Bluetooth scanning requires one of the following two permissions. You need to apply at run time.-->
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
+
+    <!--Optional. If your app need dfu function.-->
     <uses-permission android:name="android.permission.INTERNET"/>
 </manifest>

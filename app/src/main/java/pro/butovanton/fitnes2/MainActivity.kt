@@ -11,10 +11,12 @@ import androidx.navigation.ui.setupWithNavController
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
+import androidx.navigation.NavController
 
 class MainActivity : AppCompatActivity() {
 
     lateinit var drawer : DrawerLayout
+    lateinit var navController : NavController
 
     private lateinit var appBarConfiguration: AppBarConfiguration
 
@@ -26,7 +28,7 @@ class MainActivity : AppCompatActivity() {
 
         drawer = findViewById(R.id.drawer_layout)
         val navView: NavigationView = findViewById(R.id.nav_view)
-        val navController = findNavController(R.id.nav_host_fragment)
+        navController = findNavController(R.id.nav_host_fragment)
         appBarConfiguration = AppBarConfiguration(setOf(
                 R.id.nav_bind, R.id.nav_setting_server, R.id.nav_log), drawer)
         setupActionBarWithNavController(navController, appBarConfiguration)

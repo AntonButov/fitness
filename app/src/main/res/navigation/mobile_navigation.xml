@@ -32,4 +32,9 @@
         android:name="pro.butovanton.fitnes2.ui.setting.InfoFragment"
         android:label="@string/menu_log"
         tools:layout="@layout/fragment_info" />
+
+    <fragment
+        android:id="@+id/nav_find_devices"
+        android:name="pro.butovanton.fitnes2.ui.bind.FindFragment"
+        tools:layout="@layout/fragment_find_devices" />
 </navigation>

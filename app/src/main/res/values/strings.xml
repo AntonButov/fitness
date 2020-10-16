@@ -11,4 +11,25 @@
     <string name="menu_setting_server">Настройка сервера</string>
     <string name="menu_log">Лог</string>
     <string name="menu_info">Информация о паре</string>
+
+    <string name="dialog_msg_location_feature">Scanning Bluetooth needs to turn on the location function to use，turn on or turn off?</string>
+    <string name="permission_dialog_title">Hint</string>
+    <string name="permission_dialog_rationale_sure">Grant Permissions</string>
+    <string name="permission_dialog_rationale_cancel">Refuse</string>
+    <string name="permission_dialog_setting_message">Some of the permissions we need are rejected by you or the system  errors to cause the application to fail, please manually authorize the "Settings" page, otherwise the feature will not work properly.</string>
+    <string name="permission_dialog_setting_sure">To set</string>
+    <string name="permission_dialog_setting_cancel">Cancel</string>
+    <string name="permission_dialog_rationale_location">If  you do not have permission to locate, you may not be able to scan and connect the bracelet properly.</string>
+    <string name="permission_dialog_rationale_storage">If you do not have permissions to read and write file, you may not be able to access files.</string>
+    <string name="permission_dialog_rationale_camera">If you do not have permission to take photos, you may not be able to use the camera function.</string>
+
+    <string name="action_prompt">Hint</string>
+    <string name="action_cancel">Cancel</string>
+    <string name="action_sure">Sure</string>
+    <string name="action_scan">Scan</string>
+    <string name="action_close">Close</string>
+    <string name="action_stop_scan">Stop Scan</string>
+    <string name="action_save">Save</string>
+    <string name="action_delete">Delete</string>
+    <string name="action_add">Add</string>
 </resources>

@@ -78,4 +78,7 @@ dependencies {
     implementation(name: 'libraryDfu_v1.0.1', ext: 'aar')
 
     implementation 'com.android.support:multidex:1.0.3'
+
+    implementation 'com.yanzhenjie:permission:2.0.0-rc12'
+
 }

@@ -80,5 +80,7 @@ dependencies {
     implementation 'com.android.support:multidex:1.0.3'
 
     implementation 'com.yanzhenjie:permission:2.0.0-rc12'
+    //json
+    implementation 'com.alibaba:fastjson:1.1.71.android'
 
 }

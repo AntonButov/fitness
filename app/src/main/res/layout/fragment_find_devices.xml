@@ -4,10 +4,10 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.gallery.BindFragment">
+    tools:context=".ui.bind_and_find.BindFragment">
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/findDevicesRV"
+    <ListView
+        android:id="@+id/devicesLV"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:layout_constraintBottom_toBottomOf="parent"

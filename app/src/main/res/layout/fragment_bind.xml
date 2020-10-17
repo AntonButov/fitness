@@ -4,4 +4,25 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.gallery.BindFragment"/>
+    tools:context=".ui.bind_and_find.BindFragment">
+
+    <TextView
+        android:id="@+id/deviceTV"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/def_interval"
+        android:text="Устройство"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/unBindB"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="@dimen/def_interval"
+        android:text="Отвязать"
+        app:layout_constraintBottom_toBottomOf="@+id/deviceTV"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/deviceTV" />
+</androidx.constraintlayout.widget.ConstraintLayout>

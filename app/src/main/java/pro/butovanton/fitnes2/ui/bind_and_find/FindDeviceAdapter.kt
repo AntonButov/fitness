@@ -1,9 +1,8 @@
-package pro.butovanton.fitnes2.ui.bind
+package pro.butovanton.fitnes2.ui.bind_and_find
 
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import pro.butovanton.fitnes2.R
 

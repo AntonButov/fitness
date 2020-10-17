@@ -26,8 +26,9 @@ class BindFragment : Fragment() {
     ): View? {
        val root = inflater.inflate(R.layout.fragment_bind, container, false)
        device = (App).device
-       if (device == null)
-            (activity as MainActivity).navController.navigate(R.id.nav_find_devices)
+       if (device == null) {
+           (activity as MainActivity).navController.navigate(R.id.action_nav_bind_to_nav_find_devices)
+       }
        else {
            val deviceTV = root.findViewById(R.id.deviceTV) as TextView
            deviceTV.text = device!!.name
@@ -36,7 +37,8 @@ class BindFragment : Fragment() {
         val unBindB = root.findViewById<Button>(R.id.unBindB)
         unBindB.setOnClickListener {
             (App).device = null
-            (activity as MainActivity).navController.navigate(R.id.nav_find_devices)
+            (activity as MainActivity).navController.popBackStack(R.id.nav_home, false)
+            (activity as MainActivity).navController.navigate(R.id.action_nav_bind_to_nav_find_devices)
         }
         return root
     }

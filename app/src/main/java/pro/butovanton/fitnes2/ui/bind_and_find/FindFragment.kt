@@ -104,6 +104,7 @@ class FindFragment : Fragment() {
         mScanDisposable?.dispose()
     }
 
+
     override fun onDestroy() {
         super.onDestroy()
         stopScanning()

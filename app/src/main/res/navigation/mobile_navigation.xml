@@ -14,7 +14,12 @@
         android:id="@+id/nav_bind"
         android:name="pro.butovanton.fitnes2.ui.bind_and_find.BindFragment"
         android:label="@string/menu_bind"
-        tools:layout="@layout/fragment_home" />
+        tools:layout="@layout/fragment_bind" >
+        <action
+            android:id="@+id/action_nav_bind_to_nav_find_devices"
+            app:destination="@id/nav_find_devices"
+            app:popUpTo="@id/nav_home" />
+    </fragment>
     <fragment
         android:id="@+id/nav_setting_server"
         android:name="pro.butovanton.fitnes2.ui.setting.SettingServerFragment"

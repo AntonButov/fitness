@@ -2,6 +2,7 @@ package pro.butovanton.fitnes2
 
 import android.os.Bundle
 import android.view.Menu
+import android.view.View
 import android.widget.ImageButton
 import com.google.android.material.navigation.NavigationView
 import androidx.navigation.findNavController
@@ -13,6 +14,9 @@ import androidx.drawerlayout.widget.DrawerLayout
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.navigation.NavController
+import androidx.navigation.NavDestination
+import kotlinx.android.synthetic.main.app_bar_main.*
+import kotlinx.android.synthetic.main.content_main.*
 
 class MainActivity : AppCompatActivity() {
 
@@ -34,7 +38,23 @@ class MainActivity : AppCompatActivity() {
                 R.id.nav_bind, R.id.nav_setting_server, R.id.nav_log), drawer)
         setupActionBarWithNavController(navController, appBarConfiguration)
         navView.setupWithNavController(navController)
+        navController.addOnDestinationChangedListener(object : NavController.OnDestinationChangedListener {
+            override fun onDestinationChanged(
+                controller: NavController,
+                destination: NavDestination,
+                arguments: Bundle?
+            ) {
+                if (destination.id == R.id.nav_home)
+                    backIB.visibility = View.INVISIBLE
+                else
+                    backIB.visibility = View.VISIBLE
+            }
 
+        })
+        backIB.setOnClickListener {
+            navController.popBackStack()
+
+        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {

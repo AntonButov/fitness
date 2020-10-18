@@ -12,20 +12,13 @@ import pro.butovanton.fitnes2.R
 
 class SettingServerFragment : Fragment() {
 
-    private lateinit var infoViewModel: InfoViewModel
-
     override fun onCreateView(
             inflater: LayoutInflater,
             container: ViewGroup?,
             savedInstanceState: Bundle?
     ): View? {
-        infoViewModel =
-                ViewModelProviders.of(this).get(InfoViewModel::class.java)
         val root = inflater.inflate(R.layout.fragment_setting_server, container, false)
-        val textView: TextView = root.findViewById(R.id.text_slideshow)
-        infoViewModel.text.observe(viewLifecycleOwner, Observer {
-            textView.text = it
-        })
+
         return root
     }
 }

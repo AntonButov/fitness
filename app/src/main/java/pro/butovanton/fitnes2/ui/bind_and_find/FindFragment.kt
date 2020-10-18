@@ -46,7 +46,7 @@ class FindFragment : Fragment() {
             val result = mAdapter!!.getItem(position) as ScanResult
             val device = result.bleDevice.bluetoothDevice
             (App).device = device
-            (activity as MainActivity).navController.popBackStack()
+            (activity as MainActivity).navController.navigate(R.id.action_nav_find_devices_to_nav_bind)
         }
 /*
         val viewManager = LinearLayoutManager(activity)

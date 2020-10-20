@@ -1,14 +1,33 @@
 package pro.butovanton.fitnes2
 
 import android.app.Service
+import android.bluetooth.BluetoothDevice
+import android.content.Context
 import android.content.Intent
 import android.os.Binder
 import android.os.IBinder
 import android.util.Log
+import com.htsmart.wristband2.WristbandApplication
+import com.htsmart.wristband2.bean.ConnectionError
+import com.htsmart.wristband2.bean.ConnectionState
+import io.reactivex.disposables.Disposable
+import io.reactivex.functions.Consumer
 import kotlinx.coroutines.*
+import pro.butovanton.fitnes2.mock.DbMock
+import pro.butovanton.fitnes2.mock.User
+import pro.butovanton.fitnes2.mock.UserMock
 import pro.butovanton.fitness.net.JSONPlaceHolderApi
+import java.lang.String
 
 class MService : Service() {
+
+    private var mStateDisposable: Disposable? = null
+    private var mErrorDisposable: Disposable? = null
+
+    private val mWristbandManager = WristbandApplication.getWristbandManager()
+    var device : BluetoothDevice? = null
+    var isBind = false
+    private val mUser: User = UserMock.getLoginUser()
 
     var reportToModel : ReportToModel? = null
         set(value) { field = value }
@@ -22,11 +41,11 @@ class MService : Service() {
             get() = this@MService
     }
 
-    val api = InjectorUtils.provideApi()
+    private val api = InjectorUtils.provideApi()
 
     override fun onCreate() {
         super.onCreate()
-        job = GlobalScope.launch(Dispatchers.Main) {
+        job = GlobalScope.launch(Dispatchers.IO) {
             while (true) {
                 val serverAvial = serverAvial()
                 Log.d("DEBUG", "ServerAvable from service : " + serverAvial)
@@ -46,9 +65,58 @@ class MService : Service() {
         }
     }
 
-    private fun outServerAvial(serverAvial : Boolean) {
+    private fun outServerAvial(serverAvial: Boolean) {
         serverAvialCash = serverAvial
         reportToModel?.serverAvial(serverAvial)
+    }
+
+    fun initDeviceResponse() {
+        device = (App).device
+        connect(true)
+    }
+
+    fun stopDeviceResponse() {
+        //TODO
+        connect(false)
+    }
+
+    private fun connect(connect : Boolean) {
+        isBind = DbMock.isUserBind(this, device, mUser)
+
+        //If previously bind, use login mode
+        //If haven't  bind before, use bind mode
+        Log.d(
+            "DEBUG",
+            "Connect device:" + device!!.getAddress() + " with user:" + mUser.getId() + " use " + (if (isBind) "Login" else "Bind") + " mode"
+        )
+            mWristbandManager.connect(
+                device!!,
+                String.valueOf(mUser.getId()),
+                !connect,
+                mUser.isSex(),
+                mUser.getAge(),
+                mUser.getHeight(),
+                mUser.getWeight()
+            )
+    }
+
+    fun initConnectObserver() {
+        mStateDisposable = mWristbandManager.observerConnectionState()
+            .subscribe(
+                object : Consumer<ConnectionState> {
+                    @Throws(Exception::class)
+                    override fun accept(connectionState: ConnectionState) {
+                     Log.d("DEBUG", connectionState.name)
+                    }
+                })
+        mErrorDisposable = mWristbandManager.observerConnectionError()
+            .subscribe(
+                object : Consumer<ConnectionError> {
+                    @Throws(Exception::class)
+                    override fun accept(connectionError: ConnectionError) {
+                        Log.w("Debug","Connect Error occur and retry:" + connectionError.isRetry, connectionError.throwable)
+                    }
+                })
     }
 
 

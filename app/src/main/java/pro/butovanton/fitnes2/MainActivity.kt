@@ -38,16 +38,23 @@ class MainActivity : AppCompatActivity() {
                 R.id.nav_bind, R.id.nav_setting_server, R.id.nav_log), drawer)
         setupActionBarWithNavController(navController, appBarConfiguration)
         navView.setupWithNavController(navController)
+        menuIB.setOnClickListener {
+            drawer.open()
+        }
         navController.addOnDestinationChangedListener(object : NavController.OnDestinationChangedListener {
             override fun onDestinationChanged(
                 controller: NavController,
                 destination: NavDestination,
                 arguments: Bundle?
             ) {
-                if (destination.id == R.id.nav_home)
+                if (destination.id == R.id.nav_home) {
                     backIB.visibility = View.INVISIBLE
-                else
+                    menuIB.visibility = View.VISIBLE
+                }
+                else {
                     backIB.visibility = View.VISIBLE
+                    menuIB.visibility = View.INVISIBLE
+                }
             }
 
         })

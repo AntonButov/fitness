@@ -55,10 +55,6 @@ class HomeFragment : Fragment() {
 
         timerTV = root.findViewById(R.id.timerTV)
 
-        val menuIB = root.findViewById<ImageButton>(R.id.menuIB)
-        menuIB.setOnClickListener {
-            (activity as MainActivity).drawer.open()
-        }
         return root
     }
 
@@ -79,5 +75,6 @@ class HomeFragment : Fragment() {
                 delay(1000)
             }
         }
+
     }
 }

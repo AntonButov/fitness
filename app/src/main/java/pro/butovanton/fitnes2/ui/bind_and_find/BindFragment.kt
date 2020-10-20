@@ -20,9 +20,9 @@ class BindFragment : Fragment() {
     private var device : BluetoothDevice? = null
 
     override fun onCreateView(
-            inflater: LayoutInflater,
-            container: ViewGroup?,
-            savedInstanceState: Bundle?
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
     ): View? {
        val root = inflater.inflate(R.layout.fragment_bind, container, false)
        device = (App).device

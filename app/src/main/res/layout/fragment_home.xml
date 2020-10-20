@@ -63,16 +63,4 @@
         app:layout_constraintTop_toTopOf="@+id/textViewServerAvial"
         />
 
-    <ImageButton
-        android:id="@+id/menuIB"
-        android:layout_width="@dimen/def_interval"
-        android:layout_height="@dimen/def_interval"
-        android:layout_marginStart="@dimen/def_interval"
-        android:layout_marginLeft="@dimen/def_interval"
-        android:layout_marginTop="@dimen/def_interval"
-        android:background="@drawable/menu"
-
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
 </androidx.constraintlayout.widget.ConstraintLayout>

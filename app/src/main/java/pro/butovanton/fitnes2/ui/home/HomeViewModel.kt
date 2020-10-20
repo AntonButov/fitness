@@ -52,7 +52,7 @@ class HomeViewModel(application: Application) : AndroidViewModel(application), R
     }
 
     override fun serverAvial(sevrerAvial: Boolean) {
-        serverAvialLive.value = sevrerAvial
+        serverAvialLive.postValue(sevrerAvial)
     }
 
     val batary = InjectorUtils.provideBatary()

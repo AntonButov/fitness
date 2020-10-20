@@ -3,7 +3,6 @@ package pro.butovanton.fitnes2
 import android.os.Bundle
 import android.view.Menu
 import android.view.View
-import android.widget.ImageButton
 import com.google.android.material.navigation.NavigationView
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
@@ -16,7 +15,6 @@ import androidx.appcompat.widget.Toolbar
 import androidx.navigation.NavController
 import androidx.navigation.NavDestination
 import kotlinx.android.synthetic.main.app_bar_main.*
-import kotlinx.android.synthetic.main.content_main.*
 
 class MainActivity : AppCompatActivity() {
 
@@ -38,9 +36,6 @@ class MainActivity : AppCompatActivity() {
                 R.id.nav_bind, R.id.nav_setting_server, R.id.nav_log), drawer)
         setupActionBarWithNavController(navController, appBarConfiguration)
         navView.setupWithNavController(navController)
-        menuIB.setOnClickListener {
-            drawer.open()
-        }
         navController.addOnDestinationChangedListener(object : NavController.OnDestinationChangedListener {
             override fun onDestinationChanged(
                 controller: NavController,
@@ -49,18 +44,30 @@ class MainActivity : AppCompatActivity() {
             ) {
                 if (destination.id == R.id.nav_home) {
                     backIB.visibility = View.INVISIBLE
+                    backConstrait.visibility = View.INVISIBLE
                     menuIB.visibility = View.VISIBLE
+                    menuConstrait.visibility = View.VISIBLE
                 }
                 else {
                     backIB.visibility = View.VISIBLE
+                    backConstrait.visibility = View.VISIBLE
                     menuIB.visibility = View.INVISIBLE
+                    menuConstrait.visibility = View.INVISIBLE
                 }
             }
 
         })
         backIB.setOnClickListener {
             navController.popBackStack()
-
+        }
+        menuIB.setOnClickListener {
+            drawer.open()
+        }
+        menuConstrait.setOnClickListener{
+             menuIB.performClick()
+        }
+        backConstrait.setOnClickListener {
+            backIB.performClick()
         }
     }
 

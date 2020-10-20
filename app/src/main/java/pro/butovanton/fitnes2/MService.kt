@@ -47,9 +47,11 @@ class MService : Service() {
         super.onCreate()
         job = GlobalScope.launch(Dispatchers.IO) {
             while (true) {
-                val serverAvial = serverAvial()
-                Log.d("DEBUG", "ServerAvable from service : " + serverAvial)
-            outServerAvial(serverAvial)
+                (App).device?.let {
+                    val serverAvial = serverAvial()
+                    Log.d("DEBUG", "ServerAvable from service : " + serverAvial)
+                    outServerAvial(serverAvial)
+                }
             delay(60000)
             }
         }

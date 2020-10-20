@@ -17,7 +17,6 @@ import pro.butovanton.fitnes2.R
 class BindFragment : Fragment() {
 
     private val model: BindViewModel by viewModels()
-    private var device : BluetoothDevice? = null
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -25,18 +24,17 @@ class BindFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
        val root = inflater.inflate(R.layout.fragment_bind, container, false)
-       device = (App).device
-       if (device == null) {
+       if (!model.isBind()) {
            (activity as MainActivity).navController.navigate(R.id.action_nav_bind_to_nav_find_devices)
        }
        else {
            val deviceTV = root.findViewById(R.id.deviceTV) as TextView
-           deviceTV.text = device!!.name
+           deviceTV.text = model.getName()
        }
 
         val unBindB = root.findViewById<Button>(R.id.unBindB)
         unBindB.setOnClickListener {
-            (App).device = null
+            model.unBind()
             (activity as MainActivity).navController.navigate(R.id.action_nav_bind_to_nav_find_devices)
         }
         return root

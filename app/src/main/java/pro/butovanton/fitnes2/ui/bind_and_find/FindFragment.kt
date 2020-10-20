@@ -89,7 +89,6 @@ class FindFragment : Fragment() {
                                     "Debug",
                                     "ScanResult = " + scanResult.bleDevice.macAddress
                                 )
-
                             },
                                 Consumer<Throwable?> { stopScanning() })
                     }

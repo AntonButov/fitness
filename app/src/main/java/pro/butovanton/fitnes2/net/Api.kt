@@ -23,7 +23,7 @@ import kotlin.coroutines.suspendCoroutine
 class Api(val jSONPlaceHolderApi : JSONPlaceHolderApi ) {
 
    suspend fun alert(guid : String) : List<AlertResponse>?  {
-      return suspendCoroutine {cont ->
+      return suspendCoroutine { cont ->
           jSONPlaceHolderApi.alert(guid).enqueue(object : Callback<List<AlertResponse>> {
               override fun onResponse( call: Call<List<AlertResponse>>, response: Response<List<AlertResponse>>
               ) {

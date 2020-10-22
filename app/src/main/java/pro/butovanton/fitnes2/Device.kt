@@ -2,6 +2,7 @@ package pro.butovanton.fitnes2
 
 import android.bluetooth.BluetoothDevice
 import android.content.Context
+import android.content.Intent
 import android.util.Log
 import com.htsmart.wristband2.WristbandApplication
 import com.htsmart.wristband2.bean.ConnectionError
@@ -22,7 +23,6 @@ class Device {
     private var mStateDisposable: Disposable? = null
     private var mErrorDisposable: Disposable? = null
     var device: BluetoothDevice? = null
-    var isBind = false
     private val mUser: User = UserMock.getLoginUser()
 
     private lateinit var context: Context
@@ -31,28 +31,29 @@ class Device {
     fun initDevice(context: Context) {
         device = (App).device
         this.context = context
-        connect(context)
+        device?.let {
+            connect()
+        }
     }
 
-    private fun connect(context: Context) {
-        isBind = DbMock.isUserBind(context, device, mUser)
+    fun disConnect() {
+        mWristbandManager.close()
+    }
 
-        //If previously bind, use login mode
-        //If haven't  bind before, use bind mode
-        Log.d(
-            "DEBUG",
-            "Connect device:" + device!!.getAddress() + " with user:" + mUser.getId() + " use " + (if (isBind) "Login" else "Bind") + " mode"
-        )
-        if (!isBind)
-            mWristbandManager.connect(
+    private fun connect() {
+           mWristbandManager.connect(
                 device!!,
                 String.valueOf(mUser.getId()),
-                !isBind,
+                false,
                 mUser.isSex(),
                 mUser.getAge(),
                 mUser.getHeight(),
                 mUser.getWeight()
             )
+    }
+
+    fun flowConectSatate() : Flow<Boolean> = flow {
+        emit(isConnect())
     }
 
     suspend fun isConnect(): Boolean {
@@ -95,6 +96,10 @@ class Device {
                     }
             }
         }
+    }
+
+    fun isConnected(): Boolean {
+        return mWristbandManager.isConnected
     }
 
     fun stop() {

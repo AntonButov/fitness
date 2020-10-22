@@ -1,6 +1,9 @@
 package pro.butovanton.fitnes2.ui.bind_and_find
 
+import android.bluetooth.BluetoothDevice
+import android.content.Intent
 import android.os.Bundle
+import android.preference.PreferenceManager
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -9,14 +12,17 @@ import android.widget.ListView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import com.google.gson.Gson
 import com.htsmart.wristband2.WristbandApplication
 import com.polidea.rxandroidble2.RxBleClient
 import com.polidea.rxandroidble2.scan.ScanResult
 import io.reactivex.disposables.Disposable
 import io.reactivex.functions.Consumer
 import pro.butovanton.fitnes2.App
+import pro.butovanton.fitnes2.MService
 import pro.butovanton.fitnes2.MainActivity
 import pro.butovanton.fitnes2.R
+import pro.butovanton.fitnes2.mock.DbMock
 import pro.butovanton.fitnes2.mock.User
 import pro.butovanton.fitnes2.mock.UserMock
 import pro.butovanton.fitnes2.utils.AndPermissionHelper
@@ -46,24 +52,18 @@ class FindFragment : Fragment() {
             val result = mAdapter!!.getItem(position) as ScanResult
             val device = result.bleDevice.bluetoothDevice
             (App).device = device
+            startService()
             (activity as MainActivity).navController.navigate(R.id.action_nav_find_devices_to_nav_bind)
         }
-/*
-        val viewManager = LinearLayoutManager(activity)
-        val adapterFindDevices = FindDeviceAdapter()
-
-        root.findViewById<RecyclerView>(R.id.findDevicesRV).apply {
-            layoutManager = viewManager
-            adapter = adapterFindDevices
-        }
-     */
-        //Do not create an RxBleClient instance yourself, please get it like this.
-
-        //Do not create an RxBleClient instance yourself, please get it like this.
 
         mRxBleClient = WristbandApplication.getRxBleClient()
         startScanning()
         return root
+    }
+
+    private fun startService() {
+        val intent = Intent(activity, MService::class.java)
+        activity?.startService(intent)
     }
 
     /**

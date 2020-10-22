@@ -1,12 +1,13 @@
 package pro.butovanton.fitnes2.ui.bind_and_find
 
-import android.bluetooth.BluetoothDevice
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
+import android.app.Application
+import androidx.lifecycle.AndroidViewModel
+import com.htsmart.wristband2.WristbandApplication
 import pro.butovanton.fitnes2.App
 
-class BindViewModel : ViewModel() {
+class BindViewModel(application: Application) : AndroidViewModel(application) {
+
+    private val mWristbandManager = WristbandApplication.getWristbandManager()
 
     fun isBind() : Boolean {
         return (App).device != null
@@ -17,6 +18,8 @@ class BindViewModel : ViewModel() {
     }
 
     fun unBind() {
+        if (mWristbandManager.isConnected)
+            mWristbandManager.close()
         (App).device = null
     }
 

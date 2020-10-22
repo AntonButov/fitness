@@ -34,4 +34,8 @@ object InjectorUtils {
         return NetworkService.instance!!.jSONApi!!
     }
 
+    fun provideDevice() : Device {
+        return Device()
+    }
+
 }

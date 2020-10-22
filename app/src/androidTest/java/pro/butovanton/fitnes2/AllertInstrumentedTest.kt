@@ -21,7 +21,7 @@ import java.util.concurrent.CountDownLatch
  * See [testing documentation](http://d.android.com/tools/testing).
  */
 @RunWith(AndroidJUnit4::class)
-class InstrumentedTest {
+class AllertInstrumentedTest {
     var api = InjectorUtils.provideApi()
 
     @Test

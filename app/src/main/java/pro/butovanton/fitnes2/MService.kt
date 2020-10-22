@@ -13,6 +13,7 @@ import com.htsmart.wristband2.bean.ConnectionState
 import io.reactivex.disposables.Disposable
 import io.reactivex.functions.Consumer
 import kotlinx.coroutines.*
+import kotlinx.coroutines.flow.collect
 import pro.butovanton.fitnes2.mock.DbMock
 import pro.butovanton.fitnes2.mock.User
 import pro.butovanton.fitnes2.mock.UserMock
@@ -21,11 +22,6 @@ import java.lang.String
 
 class MService : Service() {
 
-    private var mStateDisposable: Disposable? = null
-    private var mErrorDisposable: Disposable? = null
-
-    private val mWristbandManager = WristbandApplication.getWristbandManager()
-    var device : BluetoothDevice? = null
     var isBind = false
     private val mUser: User = UserMock.getLoginUser()
 
@@ -33,6 +29,7 @@ class MService : Service() {
         set(value) { field = value }
     private val mBinder: IBinder = LocalBinder()
     lateinit var job : Job
+    lateinit var jobConnectStatus : Job
 
     var serverAvialCash : Boolean? = null
 
@@ -42,10 +39,11 @@ class MService : Service() {
     }
 
     private val api = InjectorUtils.provideApi()
+    private val deviceClass = InjectorUtils.provideDevice()
 
     override fun onCreate() {
         super.onCreate()
-        job = GlobalScope.launch(Dispatchers.IO) {
+        job = GlobalScope.launch(Dispatchers.Main) {
             while (true) {
                 (App).device?.let {
                     val serverAvial = serverAvial()
@@ -53,6 +51,12 @@ class MService : Service() {
                     outServerAvial(serverAvial)
                 }
             delay(60000)
+            }
+        }
+
+        jobConnectStatus = GlobalScope.launch(Dispatchers.Main) {
+            deviceClass.flowConectSatate().collect {
+                Log.d("DEBUG", "Flow connect = " + it)
             }
         }
     }
@@ -72,59 +76,12 @@ class MService : Service() {
         reportToModel?.serverAvial(serverAvial)
     }
 
-    fun initDeviceResponse() {
-        device = (App).device
-        connect(true)
-    }
-
-    fun stopDeviceResponse() {
-        //TODO
-        connect(false)
-    }
-
-    private fun connect(connect : Boolean) {
-        isBind = DbMock.isUserBind(this, device, mUser)
-
-        //If previously bind, use login mode
-        //If haven't  bind before, use bind mode
-        Log.d(
-            "DEBUG",
-            "Connect device:" + device!!.getAddress() + " with user:" + mUser.getId() + " use " + (if (isBind) "Login" else "Bind") + " mode"
-        )
-            mWristbandManager.connect(
-                device!!,
-                String.valueOf(mUser.getId()),
-                !connect,
-                mUser.isSex(),
-                mUser.getAge(),
-                mUser.getHeight(),
-                mUser.getWeight()
-            )
-    }
-
-    fun initConnectObserver() {
-        mStateDisposable = mWristbandManager.observerConnectionState()
-            .subscribe(
-                object : Consumer<ConnectionState> {
-                    @Throws(Exception::class)
-                    override fun accept(connectionState: ConnectionState) {
-                     Log.d("DEBUG", connectionState.name)
-                    }
-                })
-        mErrorDisposable = mWristbandManager.observerConnectionError()
-            .subscribe(
-                object : Consumer<ConnectionError> {
-                    @Throws(Exception::class)
-                    override fun accept(connectionError: ConnectionError) {
-                        Log.w("Debug","Connect Error occur and retry:" + connectionError.isRetry, connectionError.throwable)
-                    }
-                })
-    }
-
-
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
+        if ((App).device != null)
+           deviceClass.initDevice(this)
+        else
+            deviceClass.stop()
         Log.d("DEBUG", "Service startComand.")
-
         return START_STICKY
     }
 
@@ -146,6 +103,7 @@ class MService : Service() {
     override fun onDestroy() {
         super.onDestroy()
         job.cancel()
+        deviceClass.stop()
         Log.d("DEBUG", "Service destroy.")
     }
 }

@@ -86,5 +86,8 @@ dependencies {
     implementation 'com.yanzhenjie:permission:2.0.0-rc12'
     //json
     implementation 'com.alibaba:fastjson:1.1.71.android'
+    //Mockk
+    androidTestImplementation "io.mockk:mockk-android:1.9.3"
+    testImplementation "io.mockk:mockk:1.9.3"
 
 }

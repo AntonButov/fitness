@@ -4,8 +4,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
-import android.widget.ImageButton
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
@@ -16,9 +14,7 @@ import com.htsmart.wristband2.bean.ConnectionState
 import kotlinx.android.synthetic.main.fragment_home.*
 import kotlinx.coroutines.InternalCoroutinesApi
 import kotlinx.coroutines.delay
-import pro.butovanton.fitnes2.MainActivity
 import pro.butovanton.fitnes2.R
-import pro.butovanton.fitnes2.util.Logs
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -72,6 +68,13 @@ class HomeFragment : Fragment() {
 
         })
 
+        model.deviceBataryLive.observe(viewLifecycleOwner, object  : Observer<Int> {
+            override fun onChanged(bataryDevice: Int?) {
+                chargeDeviceTV2.text = "" + bataryDevice
+            }
+
+        })
+
         timerTV = root.findViewById(R.id.timerTV)
 
         return root
@@ -81,7 +84,7 @@ class HomeFragment : Fragment() {
         super.onResume()
         lifecycleScope.launchWhenResumed {
             while (true) {
-                chargeTV.text = model.getBataryPercent().toString() + "%"
+                chargeSmartTV.text = model.getBataryPercent().toString() + "%"
                 delay(60000)
             }
         }

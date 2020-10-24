@@ -5,6 +5,7 @@ import android.content.Context
 import android.util.Log
 import com.htsmart.wristband2.WristbandApplication
 import com.htsmart.wristband2.WristbandManager
+import com.htsmart.wristband2.bean.BatteryStatus
 import com.htsmart.wristband2.bean.ConnectionState
 import com.htsmart.wristband2.bean.HealthyDataResult
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -17,12 +18,16 @@ import pro.butovanton.fitnes2.mock.UserMock
 import pro.butovanton.fitnes2.util.Logs
 import java.lang.String
 import java.util.*
+import kotlin.coroutines.resume
+import kotlin.coroutines.resumeWithException
+import kotlin.coroutines.suspendCoroutine
 
 class Device {
 
     private val mWristbandManager = WristbandApplication.getWristbandManager()
     private var mErrorDisposable: Disposable? = null
     private var mTestingHealthyDisposable : Disposable? = null
+    private var bataryDisposable : Disposable? = null
     var device: BluetoothDevice? = null
     private val mUser: User = UserMock.mockUser1()
 
@@ -94,6 +99,14 @@ class Device {
                     }
                 })
 }
+    suspend fun getBatary() : BatteryStatus{
+        return suspendCoroutine {continuation ->
+            bataryDisposable = mWristbandManager.requestBattery().subscribe { bataryStatus, throwable ->
+                        continuation.resume(bataryStatus)
+                        bataryDisposable?.dispose()
+            }
+        }
+    }
 
     private fun errors() {
           mErrorDisposable = mWristbandManager.observerConnectionError()
@@ -109,6 +122,7 @@ class Device {
     fun stop() {
         mErrorDisposable?.dispose()
         mTestingHealthyDisposable?.dispose()
+        bataryDisposable?.dispose()
     }
 }
 

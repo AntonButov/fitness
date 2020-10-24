@@ -23,6 +23,7 @@ class HomeViewModel(application: Application) : AndroidViewModel(application), R
     private var mBound = false
     val serverAvialLive : MutableLiveData<Boolean> = MutableLiveData()
     val deviceStateLive : MutableLiveData<ConnectionState> = MutableLiveData()
+    val deviceBataryLive : MutableLiveData<Int> = MutableLiveData()
     private val mapplication = application
 
     private val mConnection: ServiceConnection = object : ServiceConnection {
@@ -55,6 +56,10 @@ class HomeViewModel(application: Application) : AndroidViewModel(application), R
 
     override fun deviceAvial(deviceConnectState: ConnectionState) {
         deviceStateLive.postValue(deviceConnectState)
+    }
+
+    override fun batary(batary: Int) {
+        deviceBataryLive.postValue(batary)
     }
 
     val batary = InjectorUtils.provideBatary()

@@ -16,8 +16,7 @@ class MService : Service() {
         set(value) { field = value }
     private val mBinder: IBinder = LocalBinder()
     lateinit var job : Job
-    lateinit var jobConnectStatus : Job
-    lateinit var jobConnect : Job
+    lateinit var jobBatary : Job
 
     lateinit var mStateDisposable : Disposable
 
@@ -49,6 +48,17 @@ class MService : Service() {
                 Logs.d("connected state " + connectionState.toString())
                 reportToModel?.deviceAvial(connectionState)
             }
+
+        jobBatary = GlobalScope.launch(Dispatchers.Main) {
+            while (true) {
+                if (deviceClass.isConnected()) {
+                    val batary = deviceClass.getBatary().percentage
+                    Logs.d("Batary = " + batary)
+                    reportToModel?.batary(batary)
+                }
+            delay(60000)
+            }
+        }
     }
 
     private suspend fun serverAvial(): Boolean {

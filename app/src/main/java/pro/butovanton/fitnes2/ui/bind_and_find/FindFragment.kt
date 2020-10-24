@@ -25,6 +25,7 @@ import pro.butovanton.fitnes2.R
 import pro.butovanton.fitnes2.mock.DbMock
 import pro.butovanton.fitnes2.mock.User
 import pro.butovanton.fitnes2.mock.UserMock
+import pro.butovanton.fitnes2.util.Logs
 import pro.butovanton.fitnes2.utils.AndPermissionHelper
 import pro.butovanton.fitnes2.utils.Utils
 
@@ -86,10 +87,7 @@ class FindFragment : Fragment() {
                         mScanDisposable = mRxBleClient?.scanBleDevices(scanSettings)
                             ?.subscribe(Consumer<com.polidea.rxandroidble2.scan.ScanResult?> { scanResult ->
                                 mAdapter?.add(scanResult)
-                                Log.d(
-                                    "Debug",
-                                    "ScanResult = " + scanResult.bleDevice.macAddress
-                                )
+                                Logs.d("ScanResult = " + scanResult.bleDevice.macAddress)
                             },
                                 Consumer<Throwable?> { stopScanning() })
                     }

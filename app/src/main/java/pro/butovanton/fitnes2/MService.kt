@@ -1,24 +1,14 @@
 package pro.butovanton.fitnes2
 
 import android.app.Service
-import android.bluetooth.BluetoothDevice
-import android.content.Context
 import android.content.Intent
 import android.os.Binder
 import android.os.IBinder
-import android.util.Log
-import com.htsmart.wristband2.WristbandApplication
-import com.htsmart.wristband2.bean.ConnectionError
 import com.htsmart.wristband2.bean.ConnectionState
 import io.reactivex.disposables.Disposable
-import io.reactivex.functions.Consumer
 import kotlinx.coroutines.*
-import kotlinx.coroutines.flow.collect
-import pro.butovanton.fitnes2.mock.DbMock
-import pro.butovanton.fitnes2.mock.User
-import pro.butovanton.fitnes2.mock.UserMock
+import pro.butovanton.fitnes2.util.Logs
 import pro.butovanton.fitness.net.JSONPlaceHolderApi
-import java.lang.String
 
 class MService : Service() {
 
@@ -28,6 +18,8 @@ class MService : Service() {
     lateinit var job : Job
     lateinit var jobConnectStatus : Job
     lateinit var jobConnect : Job
+
+    lateinit var mStateDisposable : Disposable
 
     var serverAvialCash : Boolean? = null
 
@@ -45,19 +37,18 @@ class MService : Service() {
             while (true) {
                 if ((App).deviceState.state) {
                     val serverAvial = serverAvial()
-                    Log.d("DEBUG", "ServerAvable from service = " + serverAvial)
+                    Logs.d("ServerAvable from service = " + serverAvial)
                     outServerAvial(serverAvial)
                 }
-            delay(60000)
+                delay(60000)
             }
         }
 
-        jobConnect = GlobalScope.launch(Dispatchers.Main) {
-            while (true) {
-        //        deviceClass.connect()
-            delay(10000)
+        mStateDisposable = deviceClass.connecterObserver()
+            .subscribe { connectionState ->
+                Logs.d("connected state " + connectionState.toString())
+                reportToModel?.deviceAvial(connectionState)
             }
-        }
     }
 
     private suspend fun serverAvial(): Boolean {
@@ -78,7 +69,9 @@ class MService : Service() {
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         if ((App).deviceState.state) {
             if (!deviceClass.isConnected()) {
-                deviceClass.connect()
+                GlobalScope.launch {
+                    deviceClass.connect()
+                }
             }
         }
         else
@@ -87,24 +80,24 @@ class MService : Service() {
     }
 
     override fun onBind(intent: Intent): IBinder? {
-        Log.d("DEBUG", "Service bind.")
+        Logs.d("Service bind.")
         return mBinder
     }
 
     override fun onUnbind(intent: Intent?): Boolean {
         return super.onUnbind(intent)
-        Log.d("DEBUG", "Service unBind.")
+        Logs.d("Service unBind.")
     }
 
     override fun onTaskRemoved(rootIntent: Intent?) {
         super.onTaskRemoved(rootIntent)
-        Log.d("DEBUG", "Task removed.")
+        Logs.d("Task removed.")
     }
 
     override fun onDestroy() {
         super.onDestroy()
         job.cancel()
         deviceClass.stop()
-        Log.d("DEBUG", "Service destroy.")
+        Logs.d("Service destroy.")
     }
 }

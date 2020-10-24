@@ -10,6 +10,8 @@ import android.util.Log;
 import com.alibaba.fastjson.JSON;
 import com.htsmart.wristband2.bean.data.TodayTotalData;
 
+import pro.butovanton.fitnes2.util.Logs;
+
 /**
  * Mock database cache
  */
@@ -24,7 +26,7 @@ public class DbMock {
     private static String getKey(BluetoothDevice device) {
         String address = device.getAddress().replaceAll(":", "");
         String key = "device_" + address;
-        Log.d(TAG, "getKey:" + key);
+        Logs.d("getKey:" + key);
         return key;
     }
 

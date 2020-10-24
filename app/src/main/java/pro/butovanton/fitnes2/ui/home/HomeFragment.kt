@@ -12,11 +12,13 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.lifecycle.lifecycleScope
 import com.bumptech.glide.Glide
+import com.htsmart.wristband2.bean.ConnectionState
 import kotlinx.android.synthetic.main.fragment_home.*
 import kotlinx.coroutines.InternalCoroutinesApi
 import kotlinx.coroutines.delay
 import pro.butovanton.fitnes2.MainActivity
 import pro.butovanton.fitnes2.R
+import pro.butovanton.fitnes2.util.Logs
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -37,7 +39,7 @@ class HomeFragment : Fragment() {
 
         val root = inflater.inflate(R.layout.fragment_home, container, false)
 
-            model.getServerAvial().observe(viewLifecycleOwner , object : Observer<Boolean> {
+            model.serverAvialLive.observe(viewLifecycleOwner , object : Observer<Boolean> {
                 override fun onChanged(serverAvial: Boolean?) {
                     var imageServerAvial = 0
                     if (serverAvial != null) {
@@ -52,6 +54,23 @@ class HomeFragment : Fragment() {
                     }
                 }
             })
+
+        model.deviceStateLive.observe(viewLifecycleOwner , object : Observer<ConnectionState> {
+            override fun onChanged(connectionState: ConnectionState?) {
+                var imageDeviceConnectedState = 0
+                when (connectionState) {
+                    ConnectionState.CONNECTED    -> imageDeviceConnectedState = R.drawable.greencircle
+                    ConnectionState.CONNECTING   -> imageDeviceConnectedState = R.drawable.yellowcircle
+                    ConnectionState.DISCONNECTED -> imageDeviceConnectedState = R.drawable.redcircle
+                }
+                Glide
+                    .with(this@HomeFragment)
+                    .load(imageDeviceConnectedState)
+                    .into(deviceStatelIV);
+
+            }
+
+        })
 
         timerTV = root.findViewById(R.id.timerTV)
 

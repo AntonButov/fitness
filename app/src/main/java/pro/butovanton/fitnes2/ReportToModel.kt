@@ -1,6 +1,8 @@
 package pro.butovanton.fitnes2
 
+import com.htsmart.wristband2.bean.ConnectionState
+
 interface ReportToModel {
     fun serverAvial(sevrerAvial : Boolean)
-    fun deviceAvial(deviceAvial : Boolean)
+    fun deviceAvial(deviceConnectState : ConnectionState)
 }

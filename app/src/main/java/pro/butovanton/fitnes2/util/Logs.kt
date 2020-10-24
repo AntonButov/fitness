@@ -2,10 +2,11 @@ package pro.butovanton.fitnes2.util
 
 import android.util.Log
 
-class Logs {
+final class Logs {
     companion object {
+        @JvmStatic
        fun d(message : String) {
-           Log.d("fitnes", message)
+           Log.d("DEBUG", message)
        }
     }
 

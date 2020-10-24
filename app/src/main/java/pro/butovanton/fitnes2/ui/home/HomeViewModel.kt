@@ -9,6 +9,7 @@ import android.os.IBinder
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import com.htsmart.wristband2.bean.ConnectionState
 import pro.butovanton.fitnes2.InjectorUtils
 import pro.butovanton.fitnes2.MService
 import pro.butovanton.fitnes2.MService.LocalBinder
@@ -21,6 +22,7 @@ class HomeViewModel(application: Application) : AndroidViewModel(application), R
     private lateinit var mService : MService
     private var mBound = false
     val serverAvialLive : MutableLiveData<Boolean> = MutableLiveData()
+    val deviceStateLive : MutableLiveData<ConnectionState> = MutableLiveData()
     private val mapplication = application
 
     private val mConnection: ServiceConnection = object : ServiceConnection {
@@ -47,12 +49,12 @@ class HomeViewModel(application: Application) : AndroidViewModel(application), R
         application.bindService(intent, mConnection, Context.BIND_AUTO_CREATE)
     }
 
-    fun getServerAvial() : LiveData<Boolean> {
-        return serverAvialLive
-    }
-
     override fun serverAvial(sevrerAvial: Boolean) {
         serverAvialLive.postValue(sevrerAvial)
+    }
+
+    override fun deviceAvial(deviceConnectState: ConnectionState) {
+        deviceStateLive.postValue(deviceConnectState)
     }
 
     val batary = InjectorUtils.provideBatary()

@@ -30,11 +30,11 @@ class AllertInstrumentedTest {
             try {
                 val response = api.alert(JSONPlaceHolderApi.GUID)
                 assertNotNull(response)
-                Log.d("DEBUG", "AllertRespose = " + response.toString())
+                Logs("DEBUG", "AllertRespose = " + response.toString())
             }
             catch (t: Throwable) {
                 assertNotNull(t)
-                Log.d("DEBUG", "Exeption = " + t.message)
+                Logs("DEBUG", "Exeption = " + t.message)
             }
         }
     }

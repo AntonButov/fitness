@@ -11,28 +11,27 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import io.reactivex.functions.Action
 import io.reactivex.functions.Consumer
+import kotlinx.coroutines.delay
 import pro.butovanton.fitnes2.mock.User
 import pro.butovanton.fitnes2.mock.UserMock
+import pro.butovanton.fitnes2.util.Logs
 import java.lang.String
+import java.util.*
 
 class Device {
 
     private val mWristbandManager = WristbandApplication.getWristbandManager()
-    private var mStateDisposable: Disposable? = null
     private var mErrorDisposable: Disposable? = null
+    private var mTestingHealthyDisposable : Disposable? = null
     var device: BluetoothDevice? = null
     private val mUser: User = UserMock.mockUser1()
 
-    private lateinit var context: Context
-    private var connectState = ConnectionState.DISCONNECTED
-
     fun disConnect() {
-        mStateDisposable?.dispose()
         mErrorDisposable?.dispose()
         mWristbandManager.close()
     }
 
-    private fun connectDevice() {
+    fun connect() {
                 device = (App).deviceState.device
                 mWristbandManager.connect(
                     device!!,
@@ -45,80 +44,53 @@ class Device {
                 )
     }
 
+    fun connecterObserver()  = mWristbandManager.observerConnectionState()
 
-    fun connect() {
-        connectDevice()
-        connecterObserver()
-        errors()
-    }
-
-    fun connecterObserver() {
-           mStateDisposable = mWristbandManager.observerConnectionState()
-                .subscribe { connectionState ->
-                    Log.d("DEBUG", "connected state " + connectionState.toString())
-                    if (connectionState == ConnectionState.CONNECTED) {
-                    }
-                    if (connectionState == ConnectionState.DISCONNECTED) {
-                }
-        }
-    }
-
-    fun healthDataObserver() {
+    fun data() {
         var healthyType = 0;
         healthyType = healthyType or WristbandManager.HEALTHY_TYPE_HEART_RATE
         healthyType = healthyType or WristbandManager.HEALTHY_TYPE_OXYGEN
         healthyType = healthyType or WristbandManager.HEALTHY_TYPE_BLOOD_PRESSURE
         healthyType = healthyType or WristbandManager.HEALTHY_TYPE_RESPIRATORY_RATE
-        val mTestingHealthyDisposable = mWristbandManager
+        mTestingHealthyDisposable = mWristbandManager
             .openHealthyRealTimeData(healthyType)
             .observeOn(AndroidSchedulers.mainThread())
             .doOnSubscribe(
                 object : Consumer<Disposable?> {
                     @Throws(Exception::class)
                     override fun accept(disposable: Disposable?) {
-                        mBtnTestHealthy.setText(R.string.real_time_data_stop)
+                        Logs.d("real_time_data_start")
                     }
                 })
             .doOnTerminate(
                 object : Action {
                     @Throws(Exception::class)
                     override fun run() {
-                        mBtnTestHealthy.setText(R.string.real_time_data_start)
+                        Logs.d("real_time_data_terminate")
                     }
                 })
             .doOnDispose(
                 object : Action {
                     @Throws(Exception::class)
                     override fun run() {
-                        mBtnTestHealthy.setText(R.string.real_time_data_start)
+                        Logs.d("real_time_data_dispose")
                     }
                 })
             .subscribe(
                 object : Consumer<HealthyDataResult> {
                     @Throws(Exception::class)
                     override fun accept(result: HealthyDataResult) {
-                        mTvHeartRate.setText(getString(R.string.heart_rate_value, result.heartRate))
-                        mTvOxygen.setText(getString(R.string.oxygen_value, result.oxygen))
-                        mTvBloodPressure.setText(
-                            getString(
-                                R.string.blood_pressure_value,
-                                result.diastolicPressure,
-                                result.systolicPressure
-                            )
-                        )
-                        mTvRespiratoryRate.setText(
-                            getString(
-                                R.string.respiratory_rate_value,
-                                result.respiratoryRate
-                            )
-                        )
-                        Log.w("RealTimeData", "Heart rate = " + result.heartRate)
+                        Logs.d("heartRate: " + result.heartRate +  "\n")
+                        Logs.d("oxygen: " + result.oxygen +  "\n")
+                        Logs.d("diastolicPressure: " + result.diastolicPressure +  "\n")
+                        Logs.d("systolicPressure: " + result.systolicPressure +  "\n")
+                        Logs.d("respiratoryRate: " + result.respiratoryRate +  "\n")
                     }
                 },
                 object : Consumer<Throwable?> {
                     @Throws(Exception::class)
                     override fun accept(throwable: Throwable?) {
-                        Log.w("RealTimeData", "RealTimeData", throwable)
+                        Logs.d("RealTimeData throable : " + throwable)
                     }
                 })
 }
@@ -126,11 +98,7 @@ class Device {
     private fun errors() {
           mErrorDisposable = mWristbandManager.observerConnectionError()
                 .subscribe { connectionError ->
-                    Log.d(
-                        "DEBUG",
-                        "Connect Error occur and retry:" + connectionError.isRetry,
-                        connectionError.throwable
-                    )
+                    Logs.d("Connect Error occur and retry:" + connectionError.isRetry)
                 }
     }
 
@@ -140,7 +108,7 @@ class Device {
 
     fun stop() {
         mErrorDisposable?.dispose()
-        mStateDisposable?.dispose()
+        mTestingHealthyDisposable?.dispose()
     }
 }
 

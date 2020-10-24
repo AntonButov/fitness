@@ -10,17 +10,17 @@ class BindViewModel(application: Application) : AndroidViewModel(application) {
     private val mWristbandManager = WristbandApplication.getWristbandManager()
 
     fun isBind() : Boolean {
-        return (App).device != null
+        return (App).deviceState.state
     }
 
     fun getName() : String {
-        return (App).device?.name.toString()
+        return (App).deviceState.device?.address.toString()
     }
 
     fun unBind() {
         if (mWristbandManager.isConnected)
-            mWristbandManager.close()
-        (App).device = null
+//            mWristbandManager.close()
+            (App).deviceState.state = false
     }
 
 }

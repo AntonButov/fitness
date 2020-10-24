@@ -22,14 +22,12 @@ import java.lang.String
 
 class MService : Service() {
 
-    var isBind = false
-    private val mUser: User = UserMock.getLoginUser()
-
     var reportToModel : ReportToModel? = null
         set(value) { field = value }
     private val mBinder: IBinder = LocalBinder()
     lateinit var job : Job
     lateinit var jobConnectStatus : Job
+    lateinit var jobConnect : Job
 
     var serverAvialCash : Boolean? = null
 
@@ -45,18 +43,19 @@ class MService : Service() {
         super.onCreate()
         job = GlobalScope.launch(Dispatchers.Main) {
             while (true) {
-                (App).device?.let {
+                if ((App).deviceState.state) {
                     val serverAvial = serverAvial()
-                    Log.d("DEBUG", "ServerAvable from service : " + serverAvial)
+                    Log.d("DEBUG", "ServerAvable from service = " + serverAvial)
                     outServerAvial(serverAvial)
                 }
             delay(60000)
             }
         }
 
-        jobConnectStatus = GlobalScope.launch(Dispatchers.Main) {
-            deviceClass.flowConectSatate().collect {
-                Log.d("DEBUG", "Flow connect = " + it)
+        jobConnect = GlobalScope.launch(Dispatchers.Main) {
+            while (true) {
+        //        deviceClass.connect()
+            delay(10000)
             }
         }
     }
@@ -77,11 +76,13 @@ class MService : Service() {
     }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
-        if ((App).device != null)
-           deviceClass.initDevice(this)
+        if ((App).deviceState.state) {
+            if (!deviceClass.isConnected()) {
+                deviceClass.connect()
+            }
+        }
         else
-            deviceClass.stop()
-        Log.d("DEBUG", "Service startComand.")
+            deviceClass.disConnect()
         return START_STICKY
     }
 

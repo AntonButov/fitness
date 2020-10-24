@@ -19,34 +19,22 @@ class App : Application() {
         WristbandApplication.init(this);
         WristbandApplication.setDebugEnable(true);
         App.app = app
-        device = getDeviceFromShared()
+        deviceState = getDeviceFromShared()
     }
 
-    private fun getDeviceFromShared() : BluetoothDevice? {
+    private fun getDeviceFromShared() : DeviseState {
         val prefs: SharedPreferences = getSharedPreferences(app, "device")
         val deviceString = prefs.getString("device", "")
-        if (deviceString.equals("")) return null
-        return Gson().fromJson(deviceString, BluetoothDevice::class.java)
+        val deviceState = DeviseState()
+        if (deviceString.equals("")) deviceState.device = null
+        else deviceState.device = Gson().fromJson(deviceString, BluetoothDevice::class.java)
+        return deviceState
     }
 
     companion object {
         lateinit var app: Application
 
-        var device: BluetoothDevice? = null
-            set(value) {
-                field = value
-                saveToDivice(value)
-       //         if (value != null)
-       //             startService()
-            }
-
-        private fun saveToDivice(device: BluetoothDevice?) {
-            val prefs: SharedPreferences = getSharedPreferences(app, "device")
-            var deviceString = ""
-            if (device != null)
-                deviceString = Gson().toJson(device)
-            prefs.edit().putString("device", deviceString).apply()
-        }
+        var deviceState = DeviseState()
 
     }
 

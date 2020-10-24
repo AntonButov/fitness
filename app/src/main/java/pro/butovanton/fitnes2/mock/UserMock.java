@@ -16,7 +16,7 @@ public class UserMock {
         }
     }
 
-    private static User mockUser1() {
+    public static User mockUser1() {
         User user = new User();
         user.setId(1);
         user.setAge(22);

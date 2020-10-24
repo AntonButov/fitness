@@ -51,7 +51,8 @@ class FindFragment : Fragment() {
         devicesRV.setOnItemClickListener { parent, view, position, id ->
             val result = mAdapter!!.getItem(position) as ScanResult
             val device = result.bleDevice.bluetoothDevice
-            (App).device = device
+            (App).deviceState.device = device
+            (App).deviceState.state = true
             startService()
             (activity as MainActivity).navController.navigate(R.id.action_nav_find_devices_to_nav_bind)
         }

@@ -99,6 +99,17 @@ class Device {
                     }
                 })
 }
+
+    suspend fun dataSHealthyingle() : HealthyDataResult {
+        return suspendCoroutine { cont ->
+         mWristbandManager.requestLatestHealthy().subscribe { healph, troawble ->
+             cont.resume(healph)
+             //cont.resumeWithException(troawble)
+             }
+        }
+    }
+
+
     suspend fun getBatary() : BatteryStatus{
         return suspendCoroutine {continuation ->
             bataryDisposable = mWristbandManager.requestBattery().subscribe { bataryStatus, throwable ->

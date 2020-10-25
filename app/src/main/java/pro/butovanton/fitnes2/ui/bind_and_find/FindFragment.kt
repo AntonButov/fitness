@@ -52,8 +52,7 @@ class FindFragment : Fragment() {
         devicesRV.setOnItemClickListener { parent, view, position, id ->
             val result = mAdapter!!.getItem(position) as ScanResult
             val device = result.bleDevice.bluetoothDevice
-            (App).deviceState.device = device
-            (App).deviceState.state = true
+            (App).deviceState.bind(device)
             startService()
             (activity as MainActivity).navController.navigate(R.id.action_nav_find_devices_to_nav_bind)
         }
@@ -82,12 +81,10 @@ class FindFragment : Fragment() {
                             .setScanMode(com.polidea.rxandroidble2.scan.ScanSettings.SCAN_MODE_LOW_LATENCY)
                             .setCallbackType(com.polidea.rxandroidble2.scan.ScanSettings.CALLBACK_TYPE_ALL_MATCHES)
                             .build()
-                        //    mSwipeRefreshLayout.setRefreshing(true)
-                        // invalidateOptionsMenu()
                         mScanDisposable = mRxBleClient?.scanBleDevices(scanSettings)
                             ?.subscribe(Consumer<com.polidea.rxandroidble2.scan.ScanResult?> { scanResult ->
                                 mAdapter?.add(scanResult)
-                                Logs.d("ScanResult = " + scanResult.bleDevice.macAddress)
+                                //Logs.d("ScanResult = " + scanResult.bleDevice.macAddress)
                             },
                                 Consumer<Throwable?> { stopScanning() })
                     }
@@ -96,9 +93,6 @@ class FindFragment : Fragment() {
     }
 
     private fun stopScanning() {
-     //   if (mScanDisposable != null) mScanDisposable.dispose()
-      //  mSwipeRefreshLayout.setRefreshing(false)
-      //  invalidateOptionsMenu()
         mScanDisposable?.dispose()
     }
 

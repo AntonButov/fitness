@@ -34,7 +34,7 @@ class BindFragment : Fragment() {
 
         val unBindB = root.findViewById<Button>(R.id.unBindB)
         unBindB.setOnClickListener {
-            model.unBind()
+            model.unBind(requireActivity())
             (activity as MainActivity).navController.navigate(R.id.action_nav_bind_to_nav_find_devices)
         }
         return root

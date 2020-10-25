@@ -10,10 +10,7 @@ import pro.butovanton.fitnes2.R
 class FindDeviceAdapter (val guests: List<Int>) :
     RecyclerView.Adapter<FindDeviceAdapter.MyViewHolder>() {
 
-    class MyViewHolder(val view: View) : RecyclerView.ViewHolder(view) {
-       // val guestIV = view.findViewById<CircleImageView>(R.id.guestIV)
-      //  val guestTV = view.findViewById<TextView>(R.id.nameGuestTV)
-    }
+    class MyViewHolder(val view: View) : RecyclerView.ViewHolder(view)
 
     override fun onCreateViewHolder(parent: ViewGroup,
                                     viewType: Int): MyViewHolder {

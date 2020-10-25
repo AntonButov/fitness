@@ -34,7 +34,7 @@ class MService : Service() {
         super.onCreate()
         job = GlobalScope.launch(Dispatchers.Main) {
             while (true) {
-                if ((App).deviceState.state) {
+                if ((App).deviceState.isBind()) {
                     val serverAvial = serverAvial()
                     Logs.d("ServerAvable from service = " + serverAvial)
                     outServerAvial(serverAvial)
@@ -77,15 +77,14 @@ class MService : Service() {
     }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
-        if ((App).deviceState.state) {
+        if ((App).deviceState.isBind()) {
             if (!deviceClass.isConnected()) {
-                GlobalScope.launch {
                     deviceClass.connect()
-                }
             }
         }
         else
-            deviceClass.disConnect()
+            if (deviceClass.isConnected())
+               deviceClass.disConnect()
         return START_STICKY
     }
 

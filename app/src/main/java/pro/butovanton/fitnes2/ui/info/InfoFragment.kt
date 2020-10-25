@@ -23,7 +23,7 @@ class InfoFragment : Fragment() {
     ): View? {
         val root = inflater.inflate(R.layout.fragment_info, container, false)
         val macDev = root.findViewById<TextView>(R.id.macDeviceTV)
-        if ((App).deviceState.state) {
+        if ((App).deviceState.isBind()) {
             macDev.text = "MAC: " + macDev.text + ((App).deviceState.device?.address)
         }
         val packInfo = context?.packageManager?.getPackageInfo(context?.packageName.toString(),0)

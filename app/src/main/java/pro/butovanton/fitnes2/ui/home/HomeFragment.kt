@@ -4,6 +4,8 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
+import android.widget.ImageButton
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
@@ -14,7 +16,9 @@ import com.htsmart.wristband2.bean.ConnectionState
 import kotlinx.android.synthetic.main.fragment_home.*
 import kotlinx.coroutines.InternalCoroutinesApi
 import kotlinx.coroutines.delay
+import pro.butovanton.fitnes2.MainActivity
 import pro.butovanton.fitnes2.R
+import pro.butovanton.fitnes2.util.Logs
 import java.text.SimpleDateFormat
 import java.util.*
 

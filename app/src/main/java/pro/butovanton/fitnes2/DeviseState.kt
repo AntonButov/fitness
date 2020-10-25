@@ -11,11 +11,7 @@ class DeviseState {
         set(value) {
             field = value
             saveToDivice(value)
-            //         if (value != null)
-            //             startService()
         }
-
-    var state = device == null
 
     private fun saveToDivice(device: BluetoothDevice?) {
         val prefs: SharedPreferences = SharedPrefesHelper.getSharedPreferences(App.app, "device")
@@ -23,5 +19,15 @@ class DeviseState {
         if (device != null)
             deviceString = Gson().toJson(device)
         prefs.edit().putString("device", deviceString).apply()
+    }
+
+    fun isBind() = device != null
+
+    fun bind(device: BluetoothDevice?) {
+        this.device = device
+    }
+
+    fun unBind() {
+        this.device = null
     }
 }

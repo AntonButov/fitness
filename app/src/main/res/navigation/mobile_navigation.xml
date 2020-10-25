@@ -21,13 +21,13 @@
     </fragment>
     <fragment
         android:id="@+id/nav_setting_server"
-        android:name="pro.butovanton.fitnes2.ui.setting.SettingServerFragment"
+        android:name="pro.butovanton.fitnes2.ui.setting.LogFragment"
         android:label="@string/menu_setting_server"
         tools:layout="@layout/fragment_setting_server" />
 
     <fragment
         android:id="@+id/nav_log"
-        android:name="pro.butovanton.fitnes2.ui.setting.SettingServerFragment"
+        android:name="pro.butovanton.fitnes2.ui.setting.LogFragment"
         android:label="@string/menu_log"
         tools:layout="@layout/fragment_setting_server" />
 

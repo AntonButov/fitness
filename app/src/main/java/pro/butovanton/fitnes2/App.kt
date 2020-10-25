@@ -26,8 +26,8 @@ class App : Application() {
         val prefs: SharedPreferences = getSharedPreferences(app, "device")
         val deviceString = prefs.getString("device", "")
         val deviceState = DeviseState()
-        if (deviceString.equals("")) deviceState.device = null
-        else deviceState.device = Gson().fromJson(deviceString, BluetoothDevice::class.java)
+        if (deviceString.equals("")) deviceState.unBind()
+        else deviceState.bind(Gson().fromJson(deviceString, BluetoothDevice::class.java))
         return deviceState
     }
 
@@ -35,7 +35,6 @@ class App : Application() {
         lateinit var app: Application
 
         var deviceState = DeviseState()
-
     }
 
 }

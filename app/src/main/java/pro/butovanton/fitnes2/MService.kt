@@ -47,32 +47,25 @@ class MService : Service() {
             .subscribe { connectionState ->
                 Logs.d("connected state " + connectionState.toString())
                 reportToModel?.deviceAvial(connectionState)
-            }
-
-        jobBatary = GlobalScope.launch(Dispatchers.Main) {
-            while (true) {
-                if (deviceClass.isConnected()) {
-                    val batary = deviceClass.getBatary().percentage
-                    Logs.d("Batary = " + batary)
-                    reportToModel?.batary(batary)
-                 //   val dataLast = deviceClass.dataSHealthyingle()
-                 //   Logs.d("Health in moment: " + dataLast.toString())
+                when (connectionState) {
+                    ConnectionState.CONNECTED -> deviceClass.data()
                 }
-            delay(100000)
             }
-        }
 
+/*
         jobBatary = GlobalScope.launch(Dispatchers.Main) {
             while (true) {
                 if (deviceClass.isConnected()) {
                     val data = deviceClass.data()
                     Logs.d("Health request.")
-                    delay(60000)
+                    delay(120000)
                 }
                 else
-                   delay(6000)
+                   delay(5000)
             }
         }
+    }
+ */
     }
 
     private suspend fun serverAvial(): Boolean {

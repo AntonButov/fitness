@@ -54,6 +54,7 @@ class MainActivity : AppCompatActivity() {
                     menuIB.visibility = View.INVISIBLE
                     menuConstrait.visibility = View.INVISIBLE
                 }
+            textTitleFragment.text = destination.label
             }
 
         })

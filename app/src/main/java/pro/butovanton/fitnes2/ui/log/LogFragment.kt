@@ -1,4 +1,4 @@
-package pro.butovanton.fitnes2.ui.setting
+package pro.butovanton.fitnes2.ui.log
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -8,7 +8,6 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import kotlinx.android.synthetic.main.fragment_log.*
-import kotlinx.android.synthetic.main.fragment_setting_server.*
 import pro.butovanton.fitnes2.R
 
 class LogFragment : Fragment() {

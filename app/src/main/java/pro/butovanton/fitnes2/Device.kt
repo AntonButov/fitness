@@ -57,6 +57,7 @@ class Device {
         healthyType = healthyType or WristbandManager.HEALTHY_TYPE_OXYGEN
         healthyType = healthyType or WristbandManager.HEALTHY_TYPE_BLOOD_PRESSURE
         healthyType = healthyType or WristbandManager.HEALTHY_TYPE_RESPIRATORY_RATE
+        healthyType = healthyType or WristbandManager.HEALTHY_TYPE_TEMPERATURE
         mTestingHealthyDisposable = mWristbandManager
             .openHealthyRealTimeData(healthyType)
             .observeOn(AndroidSchedulers.mainThread())
@@ -90,6 +91,8 @@ class Device {
                         Logs.d("diastolicPressure: " + result.diastolicPressure +  "\n")
                         Logs.d("systolicPressure: " + result.systolicPressure +  "\n")
                         Logs.d("respiratoryRate: " + result.respiratoryRate +  "\n")
+                        Logs.d("temperatureBody:" + result.temperatureBody +  "\n")
+                        Logs.d("temperatureWrist : " + result.temperatureWrist +  "\n")
                     }
                 },
                 object : Consumer<Throwable?> {

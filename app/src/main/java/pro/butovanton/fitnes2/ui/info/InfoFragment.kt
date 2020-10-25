@@ -1,4 +1,4 @@
-package pro.butovanton.fitnes2.ui.setting
+package pro.butovanton.fitnes2.ui.info
 
 import android.content.pm.ApplicationInfo
 import android.content.pm.PackageInfo

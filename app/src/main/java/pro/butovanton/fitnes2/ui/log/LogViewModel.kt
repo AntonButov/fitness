@@ -1,4 +1,4 @@
-package pro.butovanton.fitnes2.ui.setting
+package pro.butovanton.fitnes2.ui.log
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData

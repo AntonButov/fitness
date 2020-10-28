@@ -16,6 +16,7 @@
 
 package pro.butovanton.fitnes2
 
+import android.content.Context
 import pro.butovanton.fitness.net.Api
 import pro.butovanton.fitness.net.JSONPlaceHolderApi
 import pro.butovanton.fitness.net.NetworkService
@@ -36,6 +37,18 @@ object InjectorUtils {
 
     fun provideDevice() : Device {
         return Device()
+    }
+
+    fun provideLocation() : LocationClass {
+        return LocationClass(context = provideContext())
+    }
+
+    fun provideContext() : Context {
+        return (App).app
+    }
+
+    fun provideAnaliser() : Analiser {
+        return Analiser()
     }
 
 }

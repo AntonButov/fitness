@@ -74,7 +74,7 @@ class HomeFragment : Fragment() {
 
         model.deviceBataryLive.observe(viewLifecycleOwner, object  : Observer<Int> {
             override fun onChanged(bataryDevice: Int?) {
-                chargeDeviceTV2.text = "" + bataryDevice
+                chargeDeviceTV2.text = "" + bataryDevice + "%"
             }
 
         })

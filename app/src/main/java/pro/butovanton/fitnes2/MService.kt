@@ -7,6 +7,7 @@ import android.os.IBinder
 import com.htsmart.wristband2.bean.ConnectionState
 import io.reactivex.disposables.Disposable
 import kotlinx.coroutines.*
+import okhttp3.internal.wait
 import pro.butovanton.fitnes2.util.Logs
 import pro.butovanton.fitness.net.JSONPlaceHolderApi
 
@@ -21,6 +22,7 @@ class MService : Service() {
     lateinit var mStateDisposable : Disposable
 
     var serverAvialCash : Boolean? = null
+    val data = DataClass()
 
     inner class LocalBinder : Binder() {
         val service: MService
@@ -29,6 +31,7 @@ class MService : Service() {
 
     private val api = InjectorUtils.provideApi()
     private val deviceClass = InjectorUtils.provideDevice()
+    private val locationClass = InjectorUtils.provideLocation()
 
     override fun onCreate() {
         super.onCreate()
@@ -48,24 +51,31 @@ class MService : Service() {
                 Logs.d("connected state " + connectionState.toString())
                 reportToModel?.deviceAvial(connectionState)
                 when (connectionState) {
-                    ConnectionState.CONNECTED -> deviceClass.data()
+                    ConnectionState.CONNECTED -> {
+                        val location = locationClass.getLocation()
+                        Logs.d("Location = " + location)
+                        data.add(location)
+                        deviceClass.getHealth()
+                    }
                 }
             }
 
-/*
+
         jobBatary = GlobalScope.launch(Dispatchers.Main) {
             while (true) {
+                delay(15000)
                 if (deviceClass.isConnected()) {
-                    val data = deviceClass.data()
-                    Logs.d("Health request.")
-                    delay(120000)
+                bateryGet()
                 }
-                else
-                   delay(5000)
+                delay(120000)
             }
         }
-    }
- */
+        }
+
+    suspend private fun bateryGet() {
+        val batary = deviceClass.getBatary()
+        Logs.d("Batary = " + batary.percentage)
+        reportToModel?.batary(batary.percentage)
     }
 
     private suspend fun serverAvial(): Boolean {
@@ -90,8 +100,9 @@ class MService : Service() {
             }
         }
         else
-            if (deviceClass.isConnected())
-               deviceClass.disConnect()
+            if (deviceClass.isConnected()) {
+                deviceClass.disConnect()
+            }
         return START_STICKY
     }
 

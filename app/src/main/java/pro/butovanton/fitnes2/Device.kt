@@ -41,7 +41,7 @@ class Device {
                 mWristbandManager.connect(
                     device!!,
                     String.valueOf(mUser.getId()),
-                    false,
+                    true,
                     mUser.isSex(),
                     mUser.getAge(),
                     mUser.getHeight(),
@@ -51,7 +51,7 @@ class Device {
 
     fun connecterObserver()  = mWristbandManager.observerConnectionState()
 
-    fun data() {
+    fun getHealth() {
         var healthyType = 0;
         healthyType = healthyType or WristbandManager.HEALTHY_TYPE_HEART_RATE
         healthyType = healthyType or WristbandManager.HEALTHY_TYPE_OXYGEN
@@ -102,6 +102,64 @@ class Device {
                     }
                 })
 }
+
+    suspend fun getHealthSuspend() : HealthyDataResult {
+        val healthAnaliser  =  InjectorUtils.provideAnaliser()
+        return suspendCoroutine { cont ->
+            var healthyType = 0;
+            healthyType = healthyType or WristbandManager.HEALTHY_TYPE_HEART_RATE
+            healthyType = healthyType or WristbandManager.HEALTHY_TYPE_OXYGEN
+            healthyType = healthyType or WristbandManager.HEALTHY_TYPE_BLOOD_PRESSURE
+            healthyType = healthyType or WristbandManager.HEALTHY_TYPE_RESPIRATORY_RATE
+            healthyType = healthyType or WristbandManager.HEALTHY_TYPE_TEMPERATURE
+            mTestingHealthyDisposable = mWristbandManager
+                .openHealthyRealTimeData(healthyType)
+                .observeOn(AndroidSchedulers.mainThread())
+                .doOnSubscribe(
+                    object : Consumer<Disposable?> {
+                        @Throws(Exception::class)
+                        override fun accept(disposable: Disposable?) {
+                            Logs.d("real_time_data_start")
+                        }
+                    })
+                .doOnTerminate(
+                    object : Action {
+                        @Throws(Exception::class)
+                        override fun run() {
+                            Logs.d("real_time_data_terminate")
+                            mTestingHealthyDisposable?.dispose()
+                            cont.resume(healthAnaliser.getResult())
+                        }
+                    })
+                .doOnDispose(
+                    object : Action {
+                        @Throws(Exception::class)
+                        override fun run() {
+                            Logs.d("real_time_data_dispose")
+                        }
+                    })
+                .subscribe(
+                    object : Consumer<HealthyDataResult> {
+                        @Throws(Exception::class)
+                        override fun accept(health: HealthyDataResult) {
+                            Logs.d("heartRate: " + health.heartRate + "\n")
+                            Logs.d("oxygen: " + health.oxygen + "\n")
+                            Logs.d("diastolicPressure: " + health.diastolicPressure + "\n")
+                            Logs.d("systolicPressure: " + health.systolicPressure + "\n")
+                            Logs.d("respiratoryRate: " + health.respiratoryRate + "\n")
+                            Logs.d("temperatureBody:" + health.temperatureBody + "\n")
+                            Logs.d("temperatureWrist : " + health.temperatureWrist + "\n")
+                            healthAnaliser.analis(health)
+                        }
+                    },
+                    object : Consumer<Throwable?> {
+                        @Throws(Exception::class)
+                        override fun accept(throwable: Throwable?) {
+                            Logs.d("RealTimeData throable : " + throwable)
+                        }
+                    })
+        }
+    }
 
     suspend fun dataSHealthyingle() : HealthyDataResult {
         return suspendCoroutine { cont ->

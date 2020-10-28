@@ -105,6 +105,7 @@ class Device {
 
     suspend fun getHealthSuspend() : HealthyDataResult {
         val healthAnaliser  =  InjectorUtils.provideAnaliser()
+        lateinit var lastHealth : HealthyDataResult
         return suspendCoroutine { cont ->
             var healthyType = 0;
             healthyType = healthyType or WristbandManager.HEALTHY_TYPE_HEART_RATE
@@ -128,7 +129,8 @@ class Device {
                         override fun run() {
                             Logs.d("real_time_data_terminate")
                             mTestingHealthyDisposable?.dispose()
-                            cont.resume(healthAnaliser.getResult())
+                            //cont.resume(healthAnaliser.getResult())
+                            cont.resume(value = lastHealth)
                         }
                     })
                 .doOnDispose(
@@ -149,7 +151,8 @@ class Device {
                             Logs.d("respiratoryRate: " + health.respiratoryRate + "\n")
                             Logs.d("temperatureBody:" + health.temperatureBody + "\n")
                             Logs.d("temperatureWrist : " + health.temperatureWrist + "\n")
-                            healthAnaliser.analis(health)
+                           // healthAnaliser.analis(health)
+                            lastHealth = health
                         }
                     },
                     object : Consumer<Throwable?> {

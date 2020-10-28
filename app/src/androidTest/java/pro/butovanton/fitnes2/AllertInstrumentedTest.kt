@@ -26,6 +26,7 @@ class AllertInstrumentedTest {
 
     @Test
     fun alert() {
+        /*
         runBlocking {
             try {
                 val response = api.alert(JSONPlaceHolderApi.GUID)
@@ -37,6 +38,8 @@ class AllertInstrumentedTest {
                 Logs("DEBUG", "Exeption = " + t.message)
             }
         }
+
+         */
     }
 
 

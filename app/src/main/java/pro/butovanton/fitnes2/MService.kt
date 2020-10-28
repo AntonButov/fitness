@@ -62,6 +62,7 @@ class MService : Service() {
                     Logs.d("Location = " + location)
                     data.add(location)
                     val health = deviceClass.getHealthSuspend()
+                    Logs.d("Health from analiser: " + health.toString())
                     data.add(health)
                     //save toBase
                     delay(120000)

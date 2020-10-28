@@ -17,6 +17,8 @@
 package pro.butovanton.fitnes2
 
 import android.content.Context
+import pro.butovanton.fitnes2.db.AppDatabase
+import pro.butovanton.fitnes2.db.FitnessDao
 import pro.butovanton.fitness.net.Api
 import pro.butovanton.fitness.net.JSONPlaceHolderApi
 import pro.butovanton.fitness.net.NetworkService
@@ -49,6 +51,14 @@ object InjectorUtils {
 
     fun provideAnaliser() : Analiser {
         return Analiser()
+    }
+
+    fun provideDao() : FitnessDao {
+        return provideDatabase().getDao()
+    }
+
+    fun provideDatabase(): AppDatabase {
+        return AppDatabase.DB
     }
 
 }

@@ -17,7 +17,7 @@ class MService : Service() {
         set(value) { field = value }
     private val mBinder: IBinder = LocalBinder()
     lateinit var job : Job
-    lateinit var jobBatary : Job
+    lateinit var jobBase : Job
 
     lateinit var mStateDisposable : Disposable
 
@@ -50,24 +50,25 @@ class MService : Service() {
             .subscribe { connectionState ->
                 Logs.d("connected state " + connectionState.toString())
                 reportToModel?.deviceAvial(connectionState)
-                when (connectionState) {
-                    ConnectionState.CONNECTED -> {
-                        val location = locationClass.getLocation()
-                        Logs.d("Location = " + location)
-                        data.add(location)
-                        deviceClass.getHealth()
-                    }
-                }
             }
 
-
-        jobBatary = GlobalScope.launch(Dispatchers.Main) {
+        jobBase = GlobalScope.launch(Dispatchers.Main) {
             while (true) {
-                delay(15000)
                 if (deviceClass.isConnected()) {
                 bateryGet()
+                    val batary = deviceClass.getBatary().percentage
+                    reportToModel?.batary(batary = batary)
+                    val location = locationClass.getLocation()
+                    Logs.d("Location = " + location)
+                    data.add(location)
+                    val health = deviceClass.getHealthSuspend()
+                    data.add(health)
+                    //save toBase
+                    delay(120000)
                 }
-                delay(120000)
+                else
+                    delay(5000)
+
             }
         }
         }

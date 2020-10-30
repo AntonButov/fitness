@@ -33,7 +33,6 @@ abstract class AppDatabase : RoomDatabase() {
 
     companion object {
         var DB = Room.databaseBuilder(app, AppDatabase::class.java, "db_data")
-            .allowMainThreadQueries()
             .build()
     }
 }

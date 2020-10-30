@@ -27,9 +27,22 @@ interface FitnessDao {
     @Query("SELECT * FROM DATA ORDER BY date")
     fun getData(): List<Data>
 
+    @Query("SELECT * FROM DATA")
+    fun getLastData(): Data
+
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertAll(data: List<Data>)
+    suspend fun insertAll(data: kotlin.collections.MutableList<Data>)
+
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insertLast(dataLast: Data) : Long
 
     @Query("DELETE FROM data")
     fun delete()
+
+    @Query("DELETE FROM DATA WHERE date = (SELECT date FROM DATA ORDER BY date LIMIT 1)")
+    fun deleteLast()
+
+    @Query("DELETE FROM DATA WHERE date = (SELECT date FROM DATA ORDER BY date DESC LIMIT 1)")
+    fun deleteFirst()
 }

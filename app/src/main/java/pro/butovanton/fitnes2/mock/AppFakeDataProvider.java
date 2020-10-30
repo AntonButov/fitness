@@ -30,20 +30,11 @@ public class AppFakeDataProvider {
     /**
      * Create Heart Rate fake data for test
      */
-    public static List<HeartRateData> fakeHeartRate(Context context) {
-        SharedPreferences sharedPreferences = openSp(context);
-
-        //Previous time
-        long previousFakeTime = sharedPreferences.getLong("heart_rate_fake_time", 0);
-
+    public static List<HeartRateData> fakeHeartRate() {
         Calendar calendar = Calendar.getInstance();
         Date date = new Date();
         long endTime = date.getTime();//Current time
         long startTime = Utils.getDayStartTime(calendar, new Date()).getTime();//Today start time
-
-        if (previousFakeTime > startTime) {
-            startTime = previousFakeTime;
-        }
 
         List<HeartRateData> items = new ArrayList<>();
         Random random = new Random();
@@ -54,7 +45,6 @@ public class AppFakeDataProvider {
             item.setTimeStamp(time);
             item.setHeartRate(random.nextInt(60) + 40);
             items.add(item);
-            previousFakeTime = time;
 
             sum += item.getHeartRate();
             if (items.size() >= 10) {
@@ -65,8 +55,6 @@ public class AppFakeDataProvider {
         if (items.size() > 0) {
             Log.e("AppFakeDataProvider", "create HeartRate fake data: size " + items.size() + ", avg " + sum / items.size());
         }
-        sharedPreferences.edit().putLong("heart_rate_fake_time", previousFakeTime).apply();
-
         return items;
     }
 

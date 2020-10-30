@@ -19,23 +19,20 @@ package pro.butovanton.fitnes2.db
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import java.util.Calendar
-import java.util.Calendar.DAY_OF_YEAR
 
 @Entity(tableName = "data")
 data class Data(
     @PrimaryKey
     @ColumnInfo(name = "date")
-    val date: Long,
-    val heatRate: Int
-) {
-
-    /**
-     * Determines if the plant should be watered.  Returns true if [since]'s date > date of last
-     * watering + watering Interval; false otherwise.
-     */
-   // fun shouldBeWatered(since: Calendar, lastWateringDate: Calendar) =
-   //     since > lastWateringDate.apply { add(DAY_OF_YEAR, wateringInterval) }
-
-   // override fun toString() =
-}
+    val created: Long,
+    val device: String? = "",
+    val heatRate: Int,
+    val pressureDiastol: Int,
+    val pressureSystol: Int,
+    val oxygen: Int,
+    val sugar: Int,
+    val temperature: Float,
+    val breathung: Int,
+    val latitude: Double?,
+    val longitude: Double?
+)

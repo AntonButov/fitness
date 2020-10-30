@@ -4,10 +4,9 @@ import android.app.Service
 import android.content.Intent
 import android.os.Binder
 import android.os.IBinder
-import com.htsmart.wristband2.bean.ConnectionState
 import io.reactivex.disposables.Disposable
 import kotlinx.coroutines.*
-import okhttp3.internal.wait
+import pro.butovanton.fitnes2.db.DataClass
 import pro.butovanton.fitnes2.util.Logs
 import pro.butovanton.fitness.net.JSONPlaceHolderApi
 

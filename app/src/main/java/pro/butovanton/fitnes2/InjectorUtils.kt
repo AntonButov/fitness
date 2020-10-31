@@ -33,7 +33,7 @@ object InjectorUtils {
         return Batary()
     }
 
-    private fun provideJSONPlaceHolderApi() : JSONPlaceHolderApi {
+    fun provideJSONPlaceHolderApi() : JSONPlaceHolderApi {
         return NetworkService.instance!!.jSONApi!!
     }
 

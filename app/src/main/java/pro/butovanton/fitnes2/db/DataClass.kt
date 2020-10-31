@@ -8,7 +8,7 @@ import java.util.*
 
 class DataClass () {
 
-    private val created = Date().time
+    private val created = 0
     private var device = App.deviceState.device?.address
     private var location : Location? = null
     private lateinit var health : HealthyDataResult
@@ -24,7 +24,7 @@ class DataClass () {
     fun getMOdelToRoom() : Data {
         if (device == null) device = ""
         return Data(
-            created,
+            created = Date().time,
             heatRate = health.heartRate,
             device = device,
             pressureDiastol = health.diastolicPressure,
@@ -36,6 +36,5 @@ class DataClass () {
             latitude = location?.latitude,
             longitude = location?.longitude
             )
-
     }
 }

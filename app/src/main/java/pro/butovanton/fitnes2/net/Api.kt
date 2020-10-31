@@ -1,21 +1,10 @@
 package pro.butovanton.fitness.net
 
-import android.util.Log
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.runBlocking
-import okhttp3.ResponseBody
-import org.json.JSONException
-
-import org.json.JSONObject
-import pro.butovanton.fitnes2.InjectorUtils
-import pro.butovanton.fitnes2.net.responses.AlertResponse
+import pro.butovanton.fitnes2.net.retrofitDataClass.AlertResponse
 import pro.butovanton.fitnes2.util.Logs
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import retrofit2.await
 import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException
 import kotlin.coroutines.suspendCoroutine

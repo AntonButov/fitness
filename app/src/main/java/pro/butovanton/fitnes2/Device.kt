@@ -26,7 +26,7 @@ class Device {
 
     private val mWristbandManager = WristbandApplication.getWristbandManager()
     private var mErrorDisposable: Disposable? = null
-    private var mTestingHealthyDisposable : Disposable? = null
+    private lateinit var mTestingHealthyDisposable : Disposable
     private var bataryDisposable : Disposable? = null
     var device: BluetoothDevice? = null
     private val mUser: User = UserMock.mockUser1()
@@ -116,51 +116,28 @@ class Device {
             mTestingHealthyDisposable = mWristbandManager
                 .openHealthyRealTimeData(healthyType)
                 .observeOn(AndroidSchedulers.mainThread())
-                .doOnSubscribe(
-                    object : Consumer<Disposable?> {
-                        @Throws(Exception::class)
-                        override fun accept(disposable: Disposable?) {
-                            Logs.d("real_time_data_start")
-                        }
-                    })
-                .doOnTerminate(
-                    object : Action {
-                        @Throws(Exception::class)
-                        override fun run() {
-                            Logs.d("real_time_data_terminate")
-                            mTestingHealthyDisposable?.dispose()
-                            //cont.resume(healthAnaliser.getResult())
-                            cont.resume(value = lastHealth)
-                        }
-                    })
-                .doOnDispose(
-                    object : Action {
-                        @Throws(Exception::class)
-                        override fun run() {
+                .doOnSubscribe {
+                    Logs.d("real_time_data_start")
+                }
+                .doOnTerminate {
+                    Logs.d("real_time_data_terminate")
+                    mTestingHealthyDisposable.dispose()
+                }
+                .doOnDispose {
                             Logs.d("real_time_data_dispose")
-                        }
-                    })
-                .subscribe(
-                    object : Consumer<HealthyDataResult> {
-                        @Throws(Exception::class)
-                        override fun accept(health: HealthyDataResult) {
-                            Logs.d("heartRate: " + health.heartRate + "\n")
-                            Logs.d("oxygen: " + health.oxygen + "\n")
-                            Logs.d("diastolicPressure: " + health.diastolicPressure + "\n")
-                            Logs.d("systolicPressure: " + health.systolicPressure + "\n")
-                            Logs.d("respiratoryRate: " + health.respiratoryRate + "\n")
-                            Logs.d("temperatureBody:" + health.temperatureBody + "\n")
-                            Logs.d("temperatureWrist : " + health.temperatureWrist + "\n")
-                           // healthAnaliser.analis(health)
-                            lastHealth = health
-                        }
-                    },
-                    object : Consumer<Throwable?> {
-                        @Throws(Exception::class)
-                        override fun accept(throwable: Throwable?) {
-                            Logs.d("RealTimeData throable : " + throwable)
-                        }
-                    })
+                            cont.resume(lastHealth)
+                }
+                .subscribe {  health ->
+                              Logs.d("heartRate: " + health.heartRate + "\n")
+                              Logs.d("oxygen: " + health.oxygen + "\n")
+                              Logs.d("diastolicPressure: " + health.diastolicPressure + "\n")
+                              Logs.d("systolicPressure: " + health.systolicPressure + "\n")
+                              Logs.d("respiratoryRate: " + health.respiratoryRate + "\n")
+                              Logs.d("temperatureBody:" + health.temperatureBody + "\n")
+                              Logs.d("temperatureWrist : " + health.temperatureWrist + "\n")
+                             // healthAnaliser.analis(health)
+                              lastHealth = health
+                           }
         }
     }
 

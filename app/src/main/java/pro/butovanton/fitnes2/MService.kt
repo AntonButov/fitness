@@ -9,6 +9,7 @@ import kotlinx.coroutines.*
 import pro.butovanton.fitnes2.db.DataClass
 import pro.butovanton.fitnes2.util.Logs
 import pro.butovanton.fitness.net.JSONPlaceHolderApi
+import java.io.IOException
 
 class MService : Service() {
 
@@ -31,6 +32,7 @@ class MService : Service() {
     private val api = InjectorUtils.provideApi()
     private val deviceClass = InjectorUtils.provideDevice()
     private val locationClass = InjectorUtils.provideLocation()
+    private val dao = InjectorUtils.provideDao()
 
     override fun onCreate() {
         super.onCreate()
@@ -61,10 +63,11 @@ class MService : Service() {
                     Logs.d("Location = " + location)
                     data.add(location)
                     val health = deviceClass.getHealthSuspend()
-                    Logs.d("Health from analiser: " + health.toString())
                     data.add(health)
-                    //save toBase
-                    delay(120000)
+                    dao.insertLast(data.getMOdelToRoom())
+                    Logs.d("Health from device: " + health.toString())
+
+                    delay(12000)
                 }
                 else
                     delay(5000)

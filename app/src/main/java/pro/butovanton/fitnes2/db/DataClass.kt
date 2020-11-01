@@ -1,6 +1,7 @@
 package pro.butovanton.fitnes2.db
 
 import android.location.Location
+import android.location.LocationManager
 import com.htsmart.wristband2.bean.HealthyDataResult
 import okhttp3.internal.notify
 import pro.butovanton.fitnes2.App
@@ -33,6 +34,11 @@ class DataClass () {
 
     fun getMOdelToRoom(): Data {
         if (device == null) device = ""
+        if (location == null) {
+            location = Location(LocationManager.PASSIVE_PROVIDER)
+            location!!.latitude = 0.0
+            location!!.longitude = 0.0
+        }
         return Data(
             created = Date().time,
             heatRate = health.heartRate,

@@ -78,16 +78,15 @@ class MService : Service() {
             }
         }
 
-        jobSendData = GlobalScope.launch(Dispatchers.Main) {
+        jobSendData = GlobalScope.launch(Dispatchers.IO) {
             val convertor = Convertor()
-         //   while (true) {
-          //      val data = dao.getLastData()
-         //      // if (data != null)
-               //     while (!api.postDetail(convertor.toRetrofit(data)))
-               //         delay(5000)
-             //       dao.deleteLast()
-         //       delay(20000)
-        //    }
+   //         while (true) {
+   //                 val data = dao.getLastData()
+   //                 while (data != null && !api.postDetail(convertor.toRetrofit(data)))
+  //                       delay(5000)
+  //                  dao.deleteLast()
+ //                   delay(20000)
+  //          }
         }
     }
 

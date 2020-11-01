@@ -40,7 +40,6 @@ class RoomTest {
         Assert.assertEquals(dateToSave, saveHearth)
         dao.deleteLast()
         assert(dao.getData().size == 0)
-        delay(30000)
         }
     }
 

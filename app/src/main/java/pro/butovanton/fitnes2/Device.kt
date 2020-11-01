@@ -3,6 +3,7 @@ package pro.butovanton.fitnes2
 import android.bluetooth.BluetoothDevice
 import android.content.Context
 import android.util.Log
+import androidx.core.content.contentValuesOf
 import com.htsmart.wristband2.WristbandApplication
 import com.htsmart.wristband2.WristbandManager
 import com.htsmart.wristband2.bean.BatteryStatus
@@ -26,7 +27,7 @@ class Device {
 
     private val mWristbandManager = WristbandApplication.getWristbandManager()
     private var mErrorDisposable: Disposable? = null
-    private lateinit var mTestingHealthyDisposable : Disposable
+    private var mTestingHealthyDisposable : Disposable? = null
     private var bataryDisposable : Disposable? = null
     var device: BluetoothDevice? = null
     private val mUser: User = UserMock.mockUser1()
@@ -103,9 +104,8 @@ class Device {
                 })
 }
 
-    suspend fun getHealthSuspend() : HealthyDataResult {
-        val healthAnaliser  =  InjectorUtils.provideAnaliser()
-        lateinit var lastHealth : HealthyDataResult
+    suspend fun getHealthSuspend() : HealthyDataResult? {
+        var lastHealth : HealthyDataResult? = null
         return suspendCoroutine { cont ->
             var healthyType = 0;
             healthyType = healthyType or WristbandManager.HEALTHY_TYPE_HEART_RATE
@@ -113,21 +113,22 @@ class Device {
             healthyType = healthyType or WristbandManager.HEALTHY_TYPE_BLOOD_PRESSURE
             healthyType = healthyType or WristbandManager.HEALTHY_TYPE_RESPIRATORY_RATE
             healthyType = healthyType or WristbandManager.HEALTHY_TYPE_TEMPERATURE
+            if (mTestingHealthyDisposable?.isDisposed == false)
+                   mTestingHealthyDisposable?.dispose()
             mTestingHealthyDisposable = mWristbandManager
                 .openHealthyRealTimeData(healthyType)
                 .observeOn(AndroidSchedulers.mainThread())
                 .doOnSubscribe {
-                    Logs.d("real_time_data_start")
+                    Logs.d("real_time_data_start disposable = " + it.toString())
                 }
                 .doOnTerminate {
                     Logs.d("real_time_data_terminate")
-                    mTestingHealthyDisposable.dispose()
+                    cont.resume(lastHealth)
                 }
                 .doOnDispose {
-                            Logs.d("real_time_data_dispose")
-                            cont.resume(lastHealth)
+                    Logs.d("real_time_data_dispose")
                 }
-                .subscribe {  health ->
+                .subscribe (  { health ->
                               Logs.d("heartRate: " + health.heartRate + "\n")
                               Logs.d("oxygen: " + health.oxygen + "\n")
                               Logs.d("diastolicPressure: " + health.diastolicPressure + "\n")
@@ -135,9 +136,10 @@ class Device {
                               Logs.d("respiratoryRate: " + health.respiratoryRate + "\n")
                               Logs.d("temperatureBody:" + health.temperatureBody + "\n")
                               Logs.d("temperatureWrist : " + health.temperatureWrist + "\n")
-                             // healthAnaliser.analis(health)
-                              lastHealth = health
-                           }
+                              lastHealth = health }
+                           , { er ->
+                               Logs.d("exption from devace" + er)
+                        })
         }
     }
 

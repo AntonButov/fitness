@@ -16,7 +16,7 @@ import kotlin.coroutines.resumeWithException
 import kotlin.coroutines.suspendCoroutine
 
 
-class Api(val jSONPlaceHolderApi : JSONPlaceHolderApi ) {
+class Api(private val jSONPlaceHolderApi : JSONPlaceHolderApi ) {
 
     suspend fun alert(guid: String): List<AlertResponse>? {
         return suspendCoroutine { cont ->

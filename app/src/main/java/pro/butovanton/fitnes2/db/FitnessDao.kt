@@ -28,7 +28,7 @@ interface FitnessDao {
     fun getData(): List<Data>
 
     @Query("SELECT * FROM DATA")
-    fun getLastData(): Data
+    suspend fun getLastData(): Data
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertAll(data: kotlin.collections.MutableList<Data>)

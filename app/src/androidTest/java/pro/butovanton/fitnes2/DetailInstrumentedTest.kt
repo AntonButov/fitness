@@ -44,37 +44,15 @@ class DetailInstrumentedTest {
 
     @Test
     fun detail() {
-        val countDetail = CountDownLatch(1)
-        jsonApi.postDetail(fakeDatail).enqueue(object : Callback<ResponseBody> {
-            override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
-            Logs.d("Detail : " + response.message().toString())
-            assertEquals(response.code(),200)
-            countDetail.count
-            }
 
-            override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
-                throw (t)
-                countDetail.count
-            }
-        })
-        countDetail.await()
+       val response =  jsonApi.postDetail(fakeDatail).execute()
+        assertEquals(response.code(),200)
     }
 
     @Test
     fun workSshifr() {
-        val workShiftCount = CountDownLatch(1)
-        jsonApi.workShift(WorkShift(testDevice, false)).enqueue(object : Callback<ResponseBody> {
-            override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
-                Logs.d("Detail : " + response.message().toString())
-                assertTrue(response.code() == 200)
-                workShiftCount.count
-            }
-
-            override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
-                throw Exception("Смена не здана.")
-            }
-        })
-        workShiftCount.await()
+        val response = jsonApi.workShift(WorkShift(testDevice, false)).execute()
+        assertEquals(response.code(), 200)
     }
 
     @Test

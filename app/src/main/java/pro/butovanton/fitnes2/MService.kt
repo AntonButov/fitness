@@ -7,6 +7,7 @@ import android.os.IBinder
 import io.reactivex.disposables.Disposable
 import kotlinx.coroutines.*
 import pro.butovanton.fitnes2.db.DataClass
+import pro.butovanton.fitnes2.net.Convertor
 import pro.butovanton.fitnes2.util.Logs
 import pro.butovanton.fitness.net.JSONPlaceHolderApi
 import java.io.IOException
@@ -18,6 +19,7 @@ class MService : Service() {
     private val mBinder: IBinder = LocalBinder()
     lateinit var job : Job
     lateinit var jobBase : Job
+    lateinit var jobSendData : Job
 
     lateinit var mStateDisposable : Disposable
 
@@ -56,25 +58,38 @@ class MService : Service() {
         jobBase = GlobalScope.launch(Dispatchers.Main) {
             while (true) {
                 if (deviceClass.isConnected()) {
-                bateryGet()
+                    bateryGet()
                     val batary = deviceClass.getBatary().percentage
                     reportToModel?.batary(batary = batary)
                     val location = locationClass.getLocation()
                     Logs.d("Location = " + location)
                     data.add(location)
-                    val health = deviceClass.getHealthSuspend()
-                    data.add(health)
-                    dao.insertLast(data.getMOdelToRoom())
-                    Logs.d("Health from device: " + health.toString())
-
-                    delay(12000)
-                }
-                else
+                        val health = deviceClass.getHealthSuspend()
+                         health?.let {
+                            //analise this
+                            data.add(it)
+                            dao.insertLast(data.getMOdelToRoom())
+                            Logs.d("Health from device: " + it.toString())
+                         }
+                        delay(12000)
+                } else
                     delay(5000)
 
             }
         }
+
+        jobSendData = GlobalScope.launch(Dispatchers.Main) {
+            val convertor = Convertor()
+         //   while (true) {
+          //      val data = dao.getLastData()
+         //      // if (data != null)
+               //     while (!api.postDetail(convertor.toRetrofit(data)))
+               //         delay(5000)
+             //       dao.deleteLast()
+         //       delay(20000)
+        //    }
         }
+    }
 
     suspend private fun bateryGet() {
         val batary = deviceClass.getBatary()

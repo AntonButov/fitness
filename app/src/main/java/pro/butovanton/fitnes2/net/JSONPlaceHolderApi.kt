@@ -3,6 +3,7 @@ package pro.butovanton.fitness.net
 import okhttp3.ResponseBody
 import pro.butovanton.fitnes2.net.retrofitDataClass.AlertResponse
 import pro.butovanton.fitnes2.net.retrofitDataClass.Detail
+import pro.butovanton.fitnes2.net.retrofitDataClass.WorkShift
 import retrofit2.Call
 import retrofit2.http.*
 
@@ -21,5 +22,8 @@ interface JSONPlaceHolderApi {
     @Headers("Content-Type: application/json")
     @POST("/v1/details")
     fun postDetail(@Body detail: Detail) : Call<ResponseBody>
+
+    @POST("/v1/workshift")
+    fun workShift(@Body workShift: WorkShift) : Call<ResponseBody>
 
 }

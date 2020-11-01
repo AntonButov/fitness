@@ -10,16 +10,16 @@ import org.junit.Test
 import org.junit.runner.RunWith
 
 import org.junit.Assert.*
-import pro.butovanton.fitnes2.net.retrofitDataClass.AlertResponse
-import pro.butovanton.fitnes2.net.retrofitDataClass.Coordinates
-import pro.butovanton.fitnes2.net.retrofitDataClass.Detail
-import pro.butovanton.fitnes2.net.retrofitDataClass.Pressure
+import pro.butovanton.fitnes2.net.retrofitDataClass.*
 import pro.butovanton.fitnes2.util.Logs
+import pro.butovanton.fitnes2.util.Utils
 import pro.butovanton.fitness.net.Api
 import pro.butovanton.fitness.net.JSONPlaceHolderApi
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import java.lang.Exception
+import java.util.*
 import java.util.concurrent.CountDownLatch
 
 /**
@@ -31,30 +31,56 @@ import java.util.concurrent.CountDownLatch
 class DetailInstrumentedTest {
     val jsonApi = InjectorUtils.provideJSONPlaceHolderApi()
     val api = InjectorUtils.provideApi()
-    val fakeDatail = Detail("2020-06-16T19:25:43",
-        "00000000-0000-0000-0000-ac2a21b05f39",
+    val testDevice = "00000000-0000-0000-0000-ac2a21b05f39"
+    val fakeDatail = Detail(Utils.longDateToString(Date().time),
+        testDevice,
         60,
         Pressure(80, 120),
         98,
         3.5F,
         36.6F,
         40,
-        Coordinates(34.34F, 125.34F))
+        Coordinates(34.34, 125.34))
 
     @Test
     fun detail() {
         val countDetail = CountDownLatch(1)
         jsonApi.postDetail(fakeDatail).enqueue(object : Callback<ResponseBody> {
             override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
-            Logs.d("Detail : " + response.body().toString())
-
-                countDetail.count
+            Logs.d("Detail : " + response.message().toString())
+            assertEquals(response.code(),200)
+            countDetail.count
             }
 
             override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
+                throw (t)
                 countDetail.count
             }
         })
         countDetail.await()
+    }
+
+    @Test
+    fun workSshifr() {
+        val workShiftCount = CountDownLatch(1)
+        jsonApi.workShift(WorkShift(testDevice, false)).enqueue(object : Callback<ResponseBody> {
+            override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
+                Logs.d("Detail : " + response.message().toString())
+                assertTrue(response.code() == 200)
+                workShiftCount.count
+            }
+
+            override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
+                throw Exception("Смена не здана.")
+            }
+        })
+        workShiftCount.await()
+    }
+
+    @Test
+    fun dateToString() {
+        val dateTime = 1604210126716
+        val strDate = Utils.longDateToString(dateTime)
+        assertEquals(strDate, "2020-11-01T08:55:26")
     }
 }

@@ -25,12 +25,12 @@ data class Data(
     @PrimaryKey
     @ColumnInfo(name = "date")
     val created: Long,
-    val device: String? = "",
+    val device: String = "",
     val heatRate: Int,
     val pressureDiastol: Int,
     val pressureSystol: Int,
     val oxygen: Int,
-    val sugar: Int,
+    val sugar: Float,
     val temperature: Float,
     val breathung: Int,
     val latitude: Double?,

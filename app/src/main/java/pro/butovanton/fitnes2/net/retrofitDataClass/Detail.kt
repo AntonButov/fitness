@@ -15,5 +15,5 @@ data class Detail(val created : String,
 data class Pressure(val diastol : Int,
                     val systol : Int)
 
-data class Coordinates(val latitude: Float,
-                       val longitude : Float)
+data class Coordinates(val latitude: Double?,
+                       val longitude : Double?)

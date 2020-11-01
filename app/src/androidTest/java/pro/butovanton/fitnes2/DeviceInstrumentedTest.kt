@@ -17,8 +17,10 @@ import org.junit.runner.RunWith
 import org.junit.Assert.*
 import org.junit.Before
 import pro.butovanton.fitnes2.mock.UserMock
+import pro.butovanton.fitnes2.util.Utils
 import pro.butovanton.fitness.net.Api
 import pro.butovanton.fitness.net.JSONPlaceHolderApi
+import java.util.*
 import java.util.concurrent.CountDownLatch
 
 /**
@@ -36,8 +38,8 @@ class DeviceInstrumentedTest {
 
     @Before
     fun setUp() {
-        MockKAnnotations.init(this)
-        every { device.address } returns myTestSmartMac
+   //     MockKAnnotations.init(this)
+   //     every { device.address } returns myTestSmartMac
     }
 
     @Test
@@ -46,8 +48,5 @@ class DeviceInstrumentedTest {
   //      deviceClass.initDevice()
       //  }
     }
-
-
-
 
 }

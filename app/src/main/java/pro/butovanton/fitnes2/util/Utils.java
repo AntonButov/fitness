@@ -14,11 +14,20 @@ import java.io.File;
 import java.math.BigDecimal;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
 
 public class Utils {
+
+    public static String longDateToString(Long longDate) {
+        DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        String dateString = formatter.format(longDate);
+        dateString = dateString.replace(" ", "T");
+        return dateString;
+    }
 
     /**
      * Calculate the distance based on the number of steps and the step size(km)

@@ -38,11 +38,11 @@ interface FitnessDao {
     suspend fun insertLast(dataLast: Data) : Long
 
     @Query("DELETE FROM data")
-    fun delete()
+    suspend fun delete()
 
     @Query("DELETE FROM DATA WHERE date = (SELECT date FROM DATA ORDER BY date LIMIT 1)")
-    fun deleteLast()
+    suspend fun deleteLast()
 
     @Query("DELETE FROM DATA WHERE date = (SELECT date FROM DATA ORDER BY date DESC LIMIT 1)")
-    fun deleteFirst()
+    suspend fun deleteFirst()
 }

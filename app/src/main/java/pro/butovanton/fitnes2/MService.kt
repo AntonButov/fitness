@@ -78,15 +78,18 @@ class MService : Service() {
             }
         }
 
-        jobSendData = GlobalScope.launch(Dispatchers.IO) {
+        jobSendData = GlobalScope.launch(Dispatchers.Main) {
             val convertor = Convertor()
-   //         while (true) {
-   //                 val data = dao.getLastData()
-   //                 while (data != null && !api.postDetail(convertor.toRetrofit(data)))
-  //                       delay(5000)
-  //                  dao.deleteLast()
- //                   delay(20000)
-  //          }
+           while (true) {
+                    val data = dao.getLastData()
+                          data?.device = JSONPlaceHolderApi.GUID
+                    if (data != null && api.postDetail(convertor.toRetrofit(data))) {
+                        dao.deleteLast()
+                    }
+                    else
+                        Logs.d("Отправить не удалось.")
+                    delay(20000)
+            }
         }
     }
 

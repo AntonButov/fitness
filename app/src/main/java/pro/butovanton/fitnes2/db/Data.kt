@@ -25,7 +25,7 @@ data class Data(
     @PrimaryKey
     @ColumnInfo(name = "date")
     val created: Long,
-    val device: String = "",
+    var device: String = "",
     val heatRate: Int,
     val pressureDiastol: Int,
     val pressureSystol: Int,

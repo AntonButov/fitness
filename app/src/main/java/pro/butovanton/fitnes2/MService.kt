@@ -83,11 +83,13 @@ class MService : Service() {
            while (true) {
                     val data = dao.getLastData()
                           data?.device = JSONPlaceHolderApi.GUID
-                    if (data != null && api.postDetail(convertor.toRetrofit(data))) {
-                        dao.deleteLast()
+                    if (data != null) {
+                        if (api.postDetail(convertor.toRetrofit(data)))
+                             dao.deleteLast()
+                        else
+                            Logs.d("Отправить не удалось.")
+
                     }
-                    else
-                        Logs.d("Отправить не удалось.")
                     delay(20000)
             }
         }

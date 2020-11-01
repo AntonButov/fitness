@@ -85,6 +85,15 @@ class HomeFragment : Fragment() {
             model.changeShift()
         }
 
+        model.shiftLive.observe(viewLifecycleOwner, object : Observer<Boolean> {
+            override fun onChanged(shiftReal : Boolean?) {
+            when (shiftReal) {
+                true -> shiftB.setText("Открыть смену.")
+                false -> shiftB . setText ("Зактрыть смену.")
+            }
+        }
+        })
+
         return root
     }
 

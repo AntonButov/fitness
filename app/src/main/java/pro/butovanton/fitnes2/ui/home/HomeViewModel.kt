@@ -27,6 +27,7 @@ class HomeViewModel(application: Application) : AndroidViewModel(application), R
     val deviceStateLive : MutableLiveData<ConnectionState> = MutableLiveData()
     val deviceBataryLive : MutableLiveData<Int> = MutableLiveData()
     private val mapplication = application
+    val shiftLive = MutableLiveData<Boolean>()
 
     private  val shift = InjectorUtils.provideShift(this)
 
@@ -73,6 +74,7 @@ class HomeViewModel(application: Application) : AndroidViewModel(application), R
     }
 
     override fun shift(shift: Boolean) {
+        shiftLive.value = shift
         Logs.d(" Shift = " + shift)
     }
 

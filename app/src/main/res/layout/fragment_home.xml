@@ -61,7 +61,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/def_interval"
-        android:layout_marginTop="80dp"
+        android:layout_marginTop="32dp"
         android:textAlignment="center"
         android:textSize="60dp"
         app:layout_constraintStart_toStartOf="parent"

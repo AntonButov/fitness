@@ -32,4 +32,6 @@
     <string name="action_save">Save</string>
     <string name="action_delete">Delete</string>
     <string name="action_add">Add</string>
+
+    <string name="fitness_run">Программа запущена</string>
 </resources>

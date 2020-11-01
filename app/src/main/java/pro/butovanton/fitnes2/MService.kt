@@ -1,16 +1,19 @@
 package pro.butovanton.fitnes2
 
-import android.app.Service
+import android.app.*
+import android.content.Context
 import android.content.Intent
 import android.os.Binder
+import android.os.Build
 import android.os.IBinder
+import androidx.core.app.NotificationCompat
+import androidx.core.content.ContextCompat.getSystemService
 import io.reactivex.disposables.Disposable
 import kotlinx.coroutines.*
 import pro.butovanton.fitnes2.db.DataClass
 import pro.butovanton.fitnes2.net.Convertor
 import pro.butovanton.fitnes2.util.Logs
 import pro.butovanton.fitness.net.JSONPlaceHolderApi
-import java.io.IOException
 
 class MService : Service() {
 
@@ -93,6 +96,8 @@ class MService : Service() {
                     delay(20000)
             }
         }
+
+        startForeground(101, updateNotification(baseContext))
     }
 
     suspend private fun bateryGet() {
@@ -126,8 +131,32 @@ class MService : Service() {
             if (deviceClass.isConnected()) {
                 deviceClass.disConnect()
             }
+
         return START_STICKY
     }
+
+private fun updateNotification(context: Context): Notification? {
+    val info = context.resources.getString(R.string.fitness_run)
+    val action = PendingIntent.getActivity(context,
+        0, Intent(context, MainActivity::class.java),
+        PendingIntent.FLAG_CANCEL_CURRENT) // Flag indicating that if the described PendingIntent already exists, the current one should be canceled before generating a new one.
+    val manager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+    val builder: NotificationCompat.Builder
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+        val CHANNEL_ID = "Fitness_channel"
+        val channel = NotificationChannel(CHANNEL_ID, "Fitness",
+            NotificationManager.IMPORTANCE_HIGH)
+        channel.description = "Fitness channel description"
+        manager.createNotificationChannel(channel)
+        builder = NotificationCompat.Builder(context, CHANNEL_ID)
+    } else builder = NotificationCompat.Builder(context)
+    return builder.setContentIntent(action)
+        .setContentTitle(info)
+        .setTicker(info)
+        .setSmallIcon(R.drawable.ic_fitness_icon)
+        .setContentIntent(action)
+        .setOngoing(true).build()
+}
 
     override fun onBind(intent: Intent): IBinder? {
         Logs.d("Service bind.")

@@ -19,6 +19,8 @@ package pro.butovanton.fitnes2
 import android.content.Context
 import pro.butovanton.fitnes2.db.AppDatabase
 import pro.butovanton.fitnes2.db.FitnessDao
+import pro.butovanton.fitnes2.shift.Shift
+import pro.butovanton.fitnes2.shift.ShiftListener
 import pro.butovanton.fitness.net.Api
 import pro.butovanton.fitness.net.JSONPlaceHolderApi
 import pro.butovanton.fitness.net.NetworkService
@@ -59,6 +61,10 @@ object InjectorUtils {
 
     fun provideDatabase(): AppDatabase {
         return AppDatabase.DB
+    }
+
+    fun provideShift(listenerShift : ShiftListener): Shift {
+        return Shift(provideContext(), listenerShift)
     }
 
 }

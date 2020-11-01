@@ -14,10 +14,12 @@ import pro.butovanton.fitnes2.InjectorUtils
 import pro.butovanton.fitnes2.MService
 import pro.butovanton.fitnes2.MService.LocalBinder
 import pro.butovanton.fitnes2.ReportToModel
+import pro.butovanton.fitnes2.shift.ShiftListener
+import pro.butovanton.fitnes2.util.Logs
 import pro.butovanton.fitness.net.JSONPlaceHolderApi
 
 
-class HomeViewModel(application: Application) : AndroidViewModel(application), ReportToModel {
+class HomeViewModel(application: Application) : AndroidViewModel(application), ReportToModel, ShiftListener {
 
     private lateinit var mService : MService
     private var mBound = false
@@ -25,6 +27,8 @@ class HomeViewModel(application: Application) : AndroidViewModel(application), R
     val deviceStateLive : MutableLiveData<ConnectionState> = MutableLiveData()
     val deviceBataryLive : MutableLiveData<Int> = MutableLiveData()
     private val mapplication = application
+
+    private  val shift = InjectorUtils.provideShift(this)
 
     private val mConnection: ServiceConnection = object : ServiceConnection {
         override fun onServiceConnected(
@@ -66,6 +70,14 @@ class HomeViewModel(application: Application) : AndroidViewModel(application), R
 
     fun getBataryPercent() : Int {
         return batary.getBatteryPercentage(mapplication)
+    }
+
+    override fun shift(shift: Boolean) {
+        Logs.d(" Shift = " + shift)
+    }
+
+    fun changeShift() {
+        shift.changeShift()
     }
 }
 

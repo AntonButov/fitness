@@ -80,6 +80,11 @@ class HomeFragment : Fragment() {
 
         timerTV = root.findViewById(R.id.timerTV)
 
+        val shiftB = root.findViewById(R.id.shiftB) as Button
+        shiftB.setOnClickListener {
+            model.changeShift()
+        }
+
         return root
     }
 

@@ -25,7 +25,7 @@ import androidx.room.*
 interface BlackboxDao {
 
     @Query("SELECT * FROM DATA ORDER BY date")
-    fun getAll(): List<BlackBox>
+    suspend fun getAll(): List<BlackBox>
 
     @Query("SELECT * FROM DATA")
     suspend fun getLast(): BlackBox

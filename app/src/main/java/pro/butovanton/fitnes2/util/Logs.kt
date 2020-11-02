@@ -9,6 +9,7 @@ import kotlinx.coroutines.launch
 import pro.butovanton.fitnes2.App
 import pro.butovanton.fitnes2.InjectorUtils
 import pro.butovanton.fitnes2.db.blackbox.BlackBox
+import pro.butovanton.fitnes2.db.blackbox.BlackboxDao
 import java.util.*
 
 final class Logs {
@@ -33,9 +34,13 @@ final class Logs {
         }
 
         fun deleteBlackBox() {
-       GlobalScope.launch(Dispatchers.IO) {
+        GlobalScope.launch(Dispatchers.IO) {
             daoBlack.delete()
         }
-    }
+        }
+
+        suspend fun getBlackBox() : List<BlackBox> {
+            return daoBlack.getAll()
+        }
     }
 }

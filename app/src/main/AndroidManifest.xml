@@ -32,11 +32,9 @@
 
     <uses-permission android:name="android.permission.BLUETOOTH"/>
     <uses-permission android:name="android.permission.BLUETOOTH_ADMIN"/>
-
     <!--Android 6.0 and above. Bluetooth scanning requires one of the following two permissions. You need to apply at run time.-->
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
-
     <!--Optional. If your app need dfu function.-->
     <uses-permission android:name="android.permission.INTERNET"/>
 </manifest>

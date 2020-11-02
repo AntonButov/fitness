@@ -10,7 +10,7 @@ import org.junit.Assert
 
 import org.junit.Test
 import org.junit.runner.RunWith
-import pro.butovanton.fitnes2.db.DataClass
+import pro.butovanton.fitnes2.db.detail.DataClass
 
 import pro.butovanton.fitnes2.mock.AppFakeDataProvider
 

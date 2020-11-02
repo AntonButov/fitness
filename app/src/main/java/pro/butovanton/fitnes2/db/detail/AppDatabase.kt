@@ -14,25 +14,26 @@
  * limitations under the License.
  */
 
-package pro.butovanton.fitnes2.db
+package pro.butovanton.fitnes2.db.detail
 
-import androidx.room.ColumnInfo
-import androidx.room.Entity
-import androidx.room.PrimaryKey
+import androidx.room.Database
+import androidx.room.Room
+import androidx.room.RoomDatabase
+import pro.butovanton.fitnes2.App.Companion.app
 
-@Entity(tableName = "data")
-data class Data(
-    @PrimaryKey
-    @ColumnInfo(name = "date")
-    val created: Long,
-    var device: String = "",
-    val heatRate: Int,
-    val pressureDiastol: Int,
-    val pressureSystol: Int,
-    val oxygen: Int,
-    val sugar: Float,
-    val temperature: Float,
-    val breathung: Int,
-    val latitude: Double?,
-    val longitude: Double?
-)
+
+/**
+ * The Room database for this app
+ */
+@Database(entities = [Data::class], version = 1, exportSchema = false)
+//@TypeConverters(Converters::class)
+abstract class AppDatabase : RoomDatabase() {
+    abstract fun getDao(): FitnessDao
+
+    companion object {
+        var DB = Room.databaseBuilder(app, AppDatabase::class.java, "db_data")
+            .build()
+    }
+}
+
+

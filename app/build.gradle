@@ -2,6 +2,21 @@ apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlin-kapt'
+apply plugin: 'appmetrica-plugin'
+
+
+appmetrica {
+    postApiKey = { applicationVariant -> "9137a9cd-da3e-46b5-b066-d6f81703c308" }
+    // or postApiKey = "Post Api key"
+    enable = { applicationVariant -> true }    // Optional.
+    mappingBuildTypes = ['release']            // Optional.
+    offline = false                            // Optional.
+    ndk {    // Optional.
+        enable = { applicationVariant -> true }
+        soFiles = { applicationVariant -> listOfSoFiles }             // Optional.
+        additionalSoFiles = { applicationVariant -> listOfSoFiles }   // Optional.
+    }
+}
 
 android {
     compileSdkVersion 30
@@ -93,9 +108,11 @@ dependencies {
     annotationProcessor 'androidx.room:room-compiler:2.2.5'
     //room
     def room_version = "2.2.5"
-  //  implementation "androidx.room:room-coroutines:${room_version}"
+    //  implementation "androidx.room:room-coroutines:${room_version}"
     implementation "androidx.room:room-runtime:$room_version"
     kapt "androidx.room:room-compiler:$room_version"
     // optional - Kotlin Extensions and Coroutines support for Room
     implementation "androidx.room:room-ktx:$room_version"
+    // AppMetrica SDK.
+    implementation 'com.yandex.android:mobmetricalib:3.16.1'
 }

@@ -1,7 +1,6 @@
 package pro.butovanton.fitnes2.net
 
-import pro.butovanton.fitnes2.LocationClass
-import pro.butovanton.fitnes2.db.Data
+import pro.butovanton.fitnes2.db.detail.Data
 import pro.butovanton.fitnes2.net.retrofitDataClass.Coordinates
 import pro.butovanton.fitnes2.net.retrofitDataClass.Detail
 import pro.butovanton.fitnes2.net.retrofitDataClass.Pressure
@@ -11,7 +10,7 @@ class Convertor {
 
     fun toRetrofit(data : Data) : Detail {
         return Detail(Utils.longDateToString(data.created),
-                      data.device,
+               "00000000-0000-0000-0000-" + Utils.del2dot(data.device),
                       data.heatRate,
                       Pressure(data.pressureDiastol,
                                data.pressureSystol),

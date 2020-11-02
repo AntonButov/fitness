@@ -14,9 +14,8 @@
  * limitations under the License.
  */
 
-package pro.butovanton.fitnes2.db
+package pro.butovanton.fitnes2.db.blackbox
 
-import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
@@ -26,13 +25,13 @@ import pro.butovanton.fitnes2.App.Companion.app
 /**
  * The Room database for this app
  */
-@Database(entities = [Data::class], version = 1, exportSchema = false)
+@Database(entities = [BlackBox::class], version = 1, exportSchema = false)
 //@TypeConverters(Converters::class)
-abstract class AppDatabase : RoomDatabase() {
-    abstract fun getDao(): FitnessDao
+abstract class AppDatabaseBlackBox : RoomDatabase() {
+    abstract fun getBlackDao(): BlackboxDao
 
     companion object {
-        var DB = Room.databaseBuilder(app, AppDatabase::class.java, "db_data")
+        var DB = Room.databaseBuilder(app, AppDatabaseBlackBox::class.java, "db_blackbox")
             .build()
     }
 }

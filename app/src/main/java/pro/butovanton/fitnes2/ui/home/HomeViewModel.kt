@@ -41,6 +41,8 @@ class HomeViewModel(application: Application) : AndroidViewModel(application), R
             mBound = true
             mService.reportToModel = this@HomeViewModel
             serverAvialLive.value = mService.serverAvialCash
+            deviceBataryLive.value = mService.bataryCash
+            deviceStateLive.value = mService.deviceStateCash
         }
 
         override fun onServiceDisconnected(arg0: ComponentName) {

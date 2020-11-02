@@ -70,6 +70,9 @@ class MainActivity : AppCompatActivity() {
         backConstrait.setOnClickListener {
             backIB.performClick()
         }
+
+        if (!App.deviceState.isBind())
+            navController.navigate(R.id.nav_bind)
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {

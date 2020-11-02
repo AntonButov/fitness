@@ -17,8 +17,10 @@
 package pro.butovanton.fitnes2
 
 import android.content.Context
-import pro.butovanton.fitnes2.db.AppDatabase
-import pro.butovanton.fitnes2.db.FitnessDao
+import pro.butovanton.fitnes2.db.blackbox.AppDatabaseBlackBox
+import pro.butovanton.fitnes2.db.blackbox.BlackboxDao
+import pro.butovanton.fitnes2.db.detail.AppDatabase
+import pro.butovanton.fitnes2.db.detail.FitnessDao
 import pro.butovanton.fitnes2.shift.Shift
 import pro.butovanton.fitnes2.shift.ShiftListener
 import pro.butovanton.fitness.net.Api
@@ -61,6 +63,14 @@ object InjectorUtils {
 
     fun provideDatabase(): AppDatabase {
         return AppDatabase.DB
+    }
+
+    fun provideDaoBlack() : BlackboxDao {
+        return provideBlackBoxBase().getBlackDao()
+    }
+
+    fun provideBlackBoxBase(): AppDatabaseBlackBox {
+        return AppDatabaseBlackBox.DB
     }
 
     fun provideShift(listenerShift : ShiftListener): Shift {

@@ -1,12 +1,9 @@
-package pro.butovanton.fitnes2.db
+package pro.butovanton.fitnes2.db.detail
 
 import android.location.Location
 import android.location.LocationManager
 import com.htsmart.wristband2.bean.HealthyDataResult
-import okhttp3.internal.notify
 import pro.butovanton.fitnes2.App
-import pro.butovanton.fitnes2.Device
-import pro.butovanton.fitnes2.net.retrofitDataClass.Detail
 import java.util.*
 
 class DataClass () {

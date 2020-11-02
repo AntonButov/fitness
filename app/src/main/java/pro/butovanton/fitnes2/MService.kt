@@ -7,13 +7,13 @@ import android.os.Binder
 import android.os.Build
 import android.os.IBinder
 import androidx.core.app.NotificationCompat
-import androidx.core.content.ContextCompat.getSystemService
+import com.htsmart.wristband2.bean.ConnectionState
 import io.reactivex.disposables.Disposable
 import kotlinx.coroutines.*
-import pro.butovanton.fitnes2.db.DataClass
+import pro.butovanton.fitnes2.db.detail.DataClass
 import pro.butovanton.fitnes2.net.Convertor
 import pro.butovanton.fitnes2.util.Logs
-import pro.butovanton.fitness.net.JSONPlaceHolderApi
+import pro.butovanton.fitnes2.util.Utils
 
 class MService : Service() {
 
@@ -27,6 +27,8 @@ class MService : Service() {
     lateinit var mStateDisposable : Disposable
 
     var serverAvialCash : Boolean? = null
+    var bataryCash : Int? = null
+    var deviceStateCash : ConnectionState? = null
     val data = DataClass()
 
     inner class LocalBinder : Binder() {
@@ -56,6 +58,7 @@ class MService : Service() {
             .subscribe { connectionState ->
                 Logs.d("connected state " + connectionState.toString())
                 reportToModel?.deviceAvial(connectionState)
+                deviceStateCash = connectionState
             }
 
         jobBase = GlobalScope.launch(Dispatchers.Main) {
@@ -67,12 +70,13 @@ class MService : Service() {
                     val location = locationClass.getLocation()
                     Logs.d("Location = " + location)
                     data.add(location)
+                        Logs.d("Начало получения даных с часов.")
                         val health = deviceClass.getHealthSuspend()
                          health?.let {
                             //analise this
                             data.add(it)
                             dao.insertLast(data.getMOdelToRoom())
-                            Logs.d("Health from device: " + it.toString())
+                            Logs.d("Данные записаны в БД " + it.toString())
                          }
                         delay(12000)
                 } else
@@ -85,10 +89,12 @@ class MService : Service() {
             val convertor = Convertor()
            while (true) {
                     val data = dao.getLastData()
-                          data?.device = JSONPlaceHolderApi.GUID
                     if (data != null) {
-                        if (api.postDetail(convertor.toRetrofit(data)))
-                             dao.deleteLast()
+                        Logs.d("Начало отправки данных на сервер.")
+                        if (api.postDetail(convertor.toRetrofit(data))) {
+                            Logs.d("Данные отправлены.")
+                            dao.deleteLast()
+                        }
                         else
                             Logs.d("Отправить не удалось.")
 
@@ -104,11 +110,12 @@ class MService : Service() {
         val batary = deviceClass.getBatary()
         Logs.d("Batary = " + batary.percentage)
         reportToModel?.batary(batary.percentage)
+        bataryCash = batary.percentage
     }
 
     private suspend fun serverAvial(): Boolean {
         try {
-            val response = api.alert(JSONPlaceHolderApi.GUID)
+            val response = api.alert("00000000-0000-0000-0000-" + Utils.del2dot(App.deviceState.device?.address!!))
             return true
         }
         catch (t: Throwable) {

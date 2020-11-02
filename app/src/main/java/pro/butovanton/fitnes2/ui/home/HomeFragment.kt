@@ -56,24 +56,29 @@ class HomeFragment : Fragment() {
 
         model.deviceStateLive.observe(viewLifecycleOwner , object : Observer<ConnectionState> {
             override fun onChanged(connectionState: ConnectionState?) {
-                var imageDeviceConnectedState = 0
-                when (connectionState) {
-                    ConnectionState.CONNECTED    -> imageDeviceConnectedState = R.drawable.greencircle
-                    ConnectionState.CONNECTING   -> imageDeviceConnectedState = R.drawable.yellowcircle
-                    ConnectionState.DISCONNECTED -> imageDeviceConnectedState = R.drawable.redcircle
+                if (connectionState != null) {
+                    var imageDeviceConnectedState = 0
+                    when (connectionState) {
+                        ConnectionState.CONNECTED -> imageDeviceConnectedState =
+                            R.drawable.greencircle
+                        ConnectionState.CONNECTING -> imageDeviceConnectedState =
+                            R.drawable.yellowcircle
+                        ConnectionState.DISCONNECTED -> imageDeviceConnectedState =
+                            R.drawable.redcircle
+                    }
+                    Glide
+                        .with(this@HomeFragment)
+                        .load(imageDeviceConnectedState)
+                        .into(deviceStatelIV);
+
                 }
-                Glide
-                    .with(this@HomeFragment)
-                    .load(imageDeviceConnectedState)
-                    .into(deviceStatelIV);
-
             }
-
         })
 
         model.deviceBataryLive.observe(viewLifecycleOwner, object  : Observer<Int> {
             override fun onChanged(bataryDevice: Int?) {
-                chargeDeviceTV2.text = "" + bataryDevice + "%"
+                if (bataryDevice != null)
+                      chargeDeviceTV2.text = "" + bataryDevice + "%"
             }
 
         })
@@ -99,12 +104,12 @@ class HomeFragment : Fragment() {
 
     override fun onResume() {
         super.onResume()
-        lifecycleScope.launchWhenResumed {
-            while (true) {
-                chargeSmartTV.text = model.getBataryPercent().toString() + "%"
-                delay(60000)
-            }
-        }
+    //    lifecycleScope.launchWhenResumed {
+    //        while (true) {
+   //             chargeSmartTV.text = model.getBataryPercent().toString() + "%"
+   //             delay(60000)
+  //          }
+   //     }
 
         lifecycleScope.launchWhenResumed {
             while (true) {

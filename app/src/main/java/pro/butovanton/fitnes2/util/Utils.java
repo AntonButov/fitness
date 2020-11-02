@@ -22,6 +22,10 @@ import java.util.Date;
 
 public class Utils {
 
+    public static String del2dot(String device) {
+        return device.replace(":","");
+    }
+
     public static String longDateToString(Long longDate) {
         DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         String dateString = formatter.format(longDate);

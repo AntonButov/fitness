@@ -14,9 +14,8 @@
  * limitations under the License.
  */
 
-package pro.butovanton.fitnes2.db
+package pro.butovanton.fitnes2.db.detail
 
-import androidx.lifecycle.LiveData
 import androidx.room.*
 
 /**

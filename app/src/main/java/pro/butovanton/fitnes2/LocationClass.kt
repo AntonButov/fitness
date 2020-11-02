@@ -13,6 +13,9 @@ class LocationClass(val context: Context) {
 
     @SuppressLint("MissingPermission")
     fun getLocation() : Location? {
-        return locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER)
+        var location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER)
+        if (location == null)
+            location = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER)
+        return location
     }
 }

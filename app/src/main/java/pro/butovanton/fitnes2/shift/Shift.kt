@@ -10,6 +10,8 @@ import kotlinx.coroutines.launch
 import pro.butovanton.fitnes2.App
 import pro.butovanton.fitnes2.App.Companion.app
 import pro.butovanton.fitnes2.InjectorUtils
+import pro.butovanton.fitnes2.util.Logs
+import pro.butovanton.fitnes2.util.Utils
 import pro.butovanton.fitness.net.JSONPlaceHolderApi
 
 class Shift(val context: Context, val shiftListener : ShiftListener) {
@@ -32,12 +34,13 @@ class Shift(val context: Context, val shiftListener : ShiftListener) {
 
     fun changeShift() {
         GlobalScope.launch(Dispatchers.Main)  {
-   //         if (api.workShift(App.deviceState.device?.address!!, !shift)) {
-            if (api.workShift(JSONPlaceHolderApi.GUID, !shift)) {
+            if (api.workShift("00000000-0000-0000-0000-" + Utils.del2dot(App.deviceState.device?.address!!), !shift)) {
+         //   if (api.workShift(JSONPlaceHolderApi.GUID, !shift)) {
                 shift = !shift
                 shiftListener.shift(shift)
             }
             else {}
         }
+        Logs.deleteBlackBox()
     }
 }

@@ -27,7 +27,7 @@ final class Logs {
         }
 
         private fun send(message: String) {
-            logLive.value = message
+//            logLive.value = message
             GlobalScope.launch(Dispatchers.IO) {
                 daoBlack.insertLast(BlackBox(Date().time, message))
             }

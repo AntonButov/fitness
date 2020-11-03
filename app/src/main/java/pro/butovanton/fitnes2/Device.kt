@@ -129,13 +129,13 @@ class Device {
                     Logs.d("real_time_data_dispose")
                 }
                 .subscribe (  { health ->
-                              Logs.d("heartRate: " + health.heartRate + "\n")
-                              Logs.d("oxygen: " + health.oxygen + "\n")
-                              Logs.d("diastolicPressure: " + health.diastolicPressure + "\n")
-                              Logs.d("systolicPressure: " + health.systolicPressure + "\n")
-                              Logs.d("respiratoryRate: " + health.respiratoryRate + "\n")
-                              Logs.d("temperatureBody:" + health.temperatureBody + "\n")
-                              Logs.d("temperatureWrist : " + health.temperatureWrist + "\n")
+                              Logs.d("heartRate: " + health.heartRate +
+                                      ", oxygen: " + health.oxygen +
+                                      ", diastolicPressure: " + health.diastolicPressure +
+                                      ", systolicPressure: " + health.systolicPressure +
+                                      ", respiratoryRate: " + health.respiratoryRate +
+                                      ", temperatureBody:" + health.temperatureBody +
+                                      ", temperatureWrist : " + health.temperatureWrist)
                               lastHealth = health }
                            , { er ->
                                Logs.d("exption from devace" + er)
@@ -154,10 +154,17 @@ class Device {
 
 
     suspend fun getBatary() : BatteryStatus{
+        Logs.d("betaryRequest")
+        if (bataryDisposable!=null && !bataryDisposable!!.isDisposed) bataryDisposable!!.dispose()
         return suspendCoroutine {continuation ->
-            bataryDisposable = mWristbandManager.requestBattery().subscribe { bataryStatus, throwable ->
+            bataryDisposable = mWristbandManager.requestBattery()
+                .subscribe { bataryStatus, throuble ->
+                        Logs.d("betaryFromDevise = " + bataryStatus.percentage)
+                        throuble?.let {
+                        Logs.d("betaryThrowble = " + throuble.message) }
                         continuation.resume(bataryStatus)
                         bataryDisposable?.dispose()
+
             }
         }
     }

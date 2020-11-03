@@ -42,7 +42,7 @@ class MService : Service() {
     private val dao = InjectorUtils.provideDao()
 
     override fun onCreate() {
-        super.onCreate()
+        super.onCreate() /*
         job = GlobalScope.launch(Dispatchers.Main) {
             while (true) {
                 if ((App).deviceState.isBind()) {
@@ -54,6 +54,7 @@ class MService : Service() {
             }
         }
 
+*/
         mStateDisposable = deviceClass.connecterObserver()
             .subscribe { connectionState ->
                 Logs.d("connected state " + connectionState.toString())
@@ -61,35 +62,36 @@ class MService : Service() {
                 deviceStateCash = connectionState
             }
 
-        jobBase = GlobalScope.launch(Dispatchers.Main) {
+        jobBase = GlobalScope.launch(Dispatchers.IO) {
             while (true) {
                 if (deviceClass.isConnected()) {
                     bateryGet()
-                    val batary = deviceClass.getBatary().percentage
-                    reportToModel?.batary(batary = batary)
+                    Logs.d("Получение локации.")
                     val location = locationClass.getLocation()
                     Logs.d("Location = " + location)
                     data.add(location)
-                        Logs.d("Начало получения даных с часов.")
-                        val health = deviceClass.getHealthSuspend()
-                         health?.let {
-                            //analise this
-                            data.add(it)
-                            dao.insertLast(data.getMOdelToRoom())
-                            Logs.d("Данные записаны в БД " + it.toString())
+                    Logs.d("Начало получения даных с часов.")
+                    val health = deviceClass.getHealthSuspend()
+                    health?.let {
+                                //analise this
+                                data.add(it)
+                                dao.insertLast(data.getMOdelToRoom())
+                                Logs.d("Данные записаны в БД " + it.toString())
                          }
-                        delay(12000)
+                    delay(12000)
                 } else
-                    delay(5000)
+                    delay(20000)
 
             }
         }
 
-        jobSendData = GlobalScope.launch(Dispatchers.Main) {
+        jobSendData = GlobalScope.launch(Dispatchers.IO) {
             val convertor = Convertor()
            while (true) {
                     val data = dao.getLastData()
                     if (data != null) {
+                        if (data.device.equals("")) dao.deleteLast()
+                        else {
                         Logs.d("Начало отправки данных на сервер.")
                         if (api.postDetail(convertor.toRetrofit(data))) {
                             Logs.d("Данные отправлены.")
@@ -98,8 +100,13 @@ class MService : Service() {
                         else
                             Logs.d("Отправить не удалось.")
 
+                    }}
+                    if ((App).deviceState.isBind()) {
+                           val serverAvial = serverAvial()
+                           Logs.d("ServerAvable from service = " + serverAvial)
+                           outServerAvial(serverAvial)
                     }
-                    delay(20000)
+                    delay(60000)
             }
         }
 

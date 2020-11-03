@@ -34,15 +34,15 @@ class LogFragment : Fragment() {
  */
 
         val viewManager = LinearLayoutManager(activity)
+        viewManager.stackFromEnd = true
         lifecycleScope.launchWhenCreated {
             val blacBoxMessages = model.getBlackBox()
             val adapterLog = LogAdapter(blacBoxMessages = blacBoxMessages)
             root.findViewById<RecyclerView>(R.id.blackBoxRV).apply {
             layoutManager = viewManager
             adapter = adapterLog
-            scrollToPosition(adapterLog.itemCount)
-        }
-        }
+            }
+           }
 
         return root
     }

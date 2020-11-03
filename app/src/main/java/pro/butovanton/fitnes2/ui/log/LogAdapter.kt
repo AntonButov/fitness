@@ -7,7 +7,7 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import pro.butovanton.fitnes2.R
 import pro.butovanton.fitnes2.db.blackbox.BlackBox
-import pro.butovanton.fitnes2.util.Utils
+import pro.butovanton.fitnes2.utils.AndPermissionHelper.Utils
 
 class LogAdapter (val blacBoxMessages: List<BlackBox>) :
     RecyclerView.Adapter<LogAdapter.MyViewHolder>() {

@@ -12,8 +12,8 @@ import io.reactivex.disposables.Disposable
 import kotlinx.coroutines.*
 import pro.butovanton.fitnes2.db.detail.DataClass
 import pro.butovanton.fitnes2.net.Convertor
-import pro.butovanton.fitnes2.util.Logs
-import pro.butovanton.fitnes2.util.Utils
+import pro.butovanton.fitnes2.utils.Logs
+import pro.butovanton.fitnes2.utils.AndPermissionHelper.Utils
 
 class MService : Service() {
 
@@ -21,7 +21,7 @@ class MService : Service() {
         set(value) { field = value }
     private val mBinder: IBinder = LocalBinder()
     lateinit var job : Job
-    lateinit var jobBase : Job
+    var jobBase : Job? = null
     lateinit var jobSendData : Job
 
     lateinit var mStateDisposable : Disposable
@@ -60,34 +60,18 @@ class MService : Service() {
                 Logs.d("connected state " + connectionState.toString())
                 reportToModel?.deviceAvial(connectionState)
                 deviceStateCash = connectionState
+                when (connectionState) {
+                    ConnectionState.CONNECTED -> {
+                        deviceClass.setConnect(this)
+                        jobBase = baseJob()
+                    }
+                    ConnectionState.DISCONNECTED -> jobBase?.cancel()
+                }
             }
-
-        jobBase = GlobalScope.launch(Dispatchers.IO) {
-            while (true) {
-                if (deviceClass.isConnected()) {
-                    bateryGet()
-                    Logs.d("Получение локации.")
-                    val location = locationClass.getLocation()
-                    Logs.d("Location = " + location)
-                    data.add(location)
-                    Logs.d("Начало получения даных с часов.")
-                    val health = deviceClass.getHealthSuspend()
-                    health?.let {
-                                //analise this
-                                data.add(it)
-                                dao.insertLast(data.getMOdelToRoom())
-                                Logs.d("Данные записаны в БД " + it.toString())
-                         }
-                    delay(12000)
-                } else
-                    delay(20000)
-
-            }
-        }
 
         jobSendData = GlobalScope.launch(Dispatchers.IO) {
             val convertor = Convertor()
-           while (true) {
+            while (true) {
                     val data = dao.getLastData()
                     if (data != null) {
                         if (data.device.equals("")) dao.deleteLast()
@@ -111,6 +95,27 @@ class MService : Service() {
         }
 
         startForeground(101, updateNotification(baseContext))
+    }
+
+    fun baseJob(): Job {
+        return GlobalScope.launch(Dispatchers.IO) {
+            while (true) {
+                    bateryGet()
+                    Logs.d("Получение локации.")
+                    val location = locationClass.getLocation()
+                    Logs.d("Location = " + location)
+                    data.add(location)
+                    Logs.d("Начало получения даных с часов.")
+                    val health = deviceClass.getHealthSuspend()
+                    health?.let {
+                        //analise this
+                        data.add(it)
+                        dao.insertLast(data.getMOdelToRoom())
+                        Logs.d("Данные записаны в БД " + it.toString())
+                    }
+            delay(20000)
+            }
+        }
     }
 
     suspend private fun bateryGet() {
@@ -138,7 +143,7 @@ class MService : Service() {
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         if ((App).deviceState.isBind()) {
             if (!deviceClass.isConnected()) {
-                    deviceClass.connect()
+                    deviceClass.connect(this)
             }
         }
         else
@@ -190,6 +195,7 @@ private fun updateNotification(context: Context): Notification? {
     override fun onDestroy() {
         super.onDestroy()
         job.cancel()
+        jobBase?.cancel()
         deviceClass.stop()
         Logs.d("Service destroy.")
     }

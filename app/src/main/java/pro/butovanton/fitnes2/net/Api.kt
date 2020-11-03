@@ -4,7 +4,7 @@ import okhttp3.ResponseBody
 import pro.butovanton.fitnes2.net.retrofitDataClass.AlertResponse
 import pro.butovanton.fitnes2.net.retrofitDataClass.Detail
 import pro.butovanton.fitnes2.net.retrofitDataClass.WorkShift
-import pro.butovanton.fitnes2.util.Logs
+import pro.butovanton.fitnes2.utils.Logs
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response

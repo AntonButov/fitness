@@ -2,25 +2,20 @@ package pro.butovanton.fitnes2
 
 import android.bluetooth.BluetoothDevice
 import android.content.Context
-import android.util.Log
-import androidx.core.content.contentValuesOf
 import com.htsmart.wristband2.WristbandApplication
 import com.htsmart.wristband2.WristbandManager
 import com.htsmart.wristband2.bean.BatteryStatus
-import com.htsmart.wristband2.bean.ConnectionState
 import com.htsmart.wristband2.bean.HealthyDataResult
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import io.reactivex.functions.Action
 import io.reactivex.functions.Consumer
-import kotlinx.coroutines.delay
+import pro.butovanton.fitnes2.mock.DbMock
 import pro.butovanton.fitnes2.mock.User
 import pro.butovanton.fitnes2.mock.UserMock
-import pro.butovanton.fitnes2.util.Logs
+import pro.butovanton.fitnes2.utils.Logs
 import java.lang.String
-import java.util.*
 import kotlin.coroutines.resume
-import kotlin.coroutines.resumeWithException
 import kotlin.coroutines.suspendCoroutine
 
 class Device {
@@ -37,17 +32,22 @@ class Device {
         mWristbandManager.close()
     }
 
-    fun connect() {
+    fun connect(contex : Context) {
                 device = (App).deviceState.device
+                val isBind = DbMock.isUserBind(contex, device, mUser)
                 mWristbandManager.connect(
                     device!!,
                     String.valueOf(mUser.getId()),
-                    true,
+                    !isBind,
                     mUser.isSex(),
                     mUser.getAge(),
                     mUser.getHeight(),
                     mUser.getWeight()
                 )
+    }
+
+    fun setConnect(contex: Context) {
+        DbMock.setUserBind(contex, device, mUser)
     }
 
     fun connecterObserver()  = mWristbandManager.observerConnectionState()
@@ -87,13 +87,13 @@ class Device {
                 object : Consumer<HealthyDataResult> {
                     @Throws(Exception::class)
                     override fun accept(result: HealthyDataResult) {
-                        Logs.d("heartRate: " + result.heartRate +  "\n")
-                        Logs.d("oxygen: " + result.oxygen +  "\n")
-                        Logs.d("diastolicPressure: " + result.diastolicPressure +  "\n")
-                        Logs.d("systolicPressure: " + result.systolicPressure +  "\n")
-                        Logs.d("respiratoryRate: " + result.respiratoryRate +  "\n")
-                        Logs.d("temperatureBody:" + result.temperatureBody +  "\n")
-                        Logs.d("temperatureWrist : " + result.temperatureWrist +  "\n")
+                        Logs.d("heartRate: " + result.heartRate + "\n")
+                        Logs.d("oxygen: " + result.oxygen + "\n")
+                        Logs.d("diastolicPressure: " + result.diastolicPressure + "\n")
+                        Logs.d("systolicPressure: " + result.systolicPressure + "\n")
+                        Logs.d("respiratoryRate: " + result.respiratoryRate + "\n")
+                        Logs.d("temperatureBody:" + result.temperatureBody + "\n")
+                        Logs.d("temperatureWrist : " + result.temperatureWrist + "\n")
                     }
                 },
                 object : Consumer<Throwable?> {
@@ -128,18 +128,18 @@ class Device {
                 .doOnDispose {
                     Logs.d("real_time_data_dispose")
                 }
-                .subscribe (  { health ->
-                              Logs.d("heartRate: " + health.heartRate +
-                                      ", oxygen: " + health.oxygen +
-                                      ", diastolicPressure: " + health.diastolicPressure +
-                                      ", systolicPressure: " + health.systolicPressure +
-                                      ", respiratoryRate: " + health.respiratoryRate +
-                                      ", temperatureBody:" + health.temperatureBody +
-                                      ", temperatureWrist : " + health.temperatureWrist)
-                              lastHealth = health }
-                           , { er ->
-                               Logs.d("exption from devace" + er)
-                        })
+                .subscribe({ health ->
+                    Logs.d("heartRate: " + health.heartRate +
+                            ", oxygen: " + health.oxygen +
+                            ", diastolicPressure: " + health.diastolicPressure +
+                            ", systolicPressure: " + health.systolicPressure +
+                            ", respiratoryRate: " + health.respiratoryRate +
+                            ", temperatureBody:" + health.temperatureBody +
+                            ", temperatureWrist : " + health.temperatureWrist)
+                    lastHealth = health
+                }, { er ->
+                    Logs.d("exption from devace" + er)
+                })
         }
     }
 
@@ -156,7 +156,7 @@ class Device {
     suspend fun getBatary() : BatteryStatus{
         Logs.d("betaryRequest")
         if (bataryDisposable!=null && !bataryDisposable!!.isDisposed) bataryDisposable!!.dispose()
-        return suspendCoroutine {continuation ->
+        return suspendCoroutine { continuation ->
             bataryDisposable = mWristbandManager.requestBattery()
                 .subscribe { bataryStatus, throuble ->
                         Logs.d("betaryFromDevise = " + bataryStatus.percentage)

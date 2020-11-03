@@ -4,7 +4,7 @@ import pro.butovanton.fitnes2.db.detail.Data
 import pro.butovanton.fitnes2.net.retrofitDataClass.Coordinates
 import pro.butovanton.fitnes2.net.retrofitDataClass.Detail
 import pro.butovanton.fitnes2.net.retrofitDataClass.Pressure
-import pro.butovanton.fitnes2.util.Utils
+import pro.butovanton.fitnes2.utils.AndPermissionHelper.Utils
 
 class Convertor {
 
@@ -18,6 +18,7 @@ class Convertor {
                       data.sugar,
                       data.temperature,
                       data.breathung,
+                      data.respiratoryRate,
                       Coordinates(data.latitude,
                                   data.longitude)
         )

@@ -46,6 +46,7 @@ class DataClass () {
             sugar = 0F,
             temperature = health.temperatureBody,
             breathung = 0,
+            respiratoryRate = health.respiratoryRate,
             latitude = location?.latitude,
             longitude = location?.longitude
         )

@@ -1,5 +1,7 @@
 package pro.butovanton.fitnes2
 
+import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.view.Menu
 import android.view.View

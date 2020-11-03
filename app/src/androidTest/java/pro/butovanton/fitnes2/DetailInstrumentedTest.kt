@@ -1,26 +1,14 @@
 package pro.butovanton.fitnes2
 
-import android.content.Context
-import android.util.Log
-import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import okhttp3.ResponseBody
 
 import org.junit.Test
 import org.junit.runner.RunWith
 
 import org.junit.Assert.*
 import pro.butovanton.fitnes2.net.retrofitDataClass.*
-import pro.butovanton.fitnes2.util.Logs
-import pro.butovanton.fitnes2.util.Utils
-import pro.butovanton.fitness.net.Api
-import pro.butovanton.fitness.net.JSONPlaceHolderApi
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
-import java.lang.Exception
+import pro.butovanton.fitnes2.utils.AndPermissionHelper.Utils
 import java.util.*
-import java.util.concurrent.CountDownLatch
 
 /**
  * Instrumented test, which will execute on an Android device.

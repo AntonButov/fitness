@@ -1,15 +1,12 @@
-package pro.butovanton.fitnes2.util
+package pro.butovanton.fitnes2.utils
 
-import android.content.Intent
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
-import pro.butovanton.fitnes2.App
 import pro.butovanton.fitnes2.InjectorUtils
 import pro.butovanton.fitnes2.db.blackbox.BlackBox
-import pro.butovanton.fitnes2.db.blackbox.BlackboxDao
 import java.util.*
 
 final class Logs {

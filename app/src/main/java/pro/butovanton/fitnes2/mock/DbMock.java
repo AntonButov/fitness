@@ -5,12 +5,11 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import android.text.TextUtils;
-import android.util.Log;
 
 import com.alibaba.fastjson.JSON;
 import com.htsmart.wristband2.bean.data.TodayTotalData;
 
-import pro.butovanton.fitnes2.util.Logs;
+import pro.butovanton.fitnes2.utils.Logs;
 
 /**
  * Mock database cache

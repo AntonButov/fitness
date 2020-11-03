@@ -7,16 +7,15 @@ import android.content.Intent
 import android.content.ServiceConnection
 import android.os.IBinder
 import androidx.lifecycle.AndroidViewModel
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.htsmart.wristband2.bean.ConnectionState
+import pro.butovanton.fitnes2.App
 import pro.butovanton.fitnes2.InjectorUtils
 import pro.butovanton.fitnes2.MService
 import pro.butovanton.fitnes2.MService.LocalBinder
 import pro.butovanton.fitnes2.ReportToModel
 import pro.butovanton.fitnes2.shift.ShiftListener
-import pro.butovanton.fitnes2.util.Logs
-import pro.butovanton.fitness.net.JSONPlaceHolderApi
+import pro.butovanton.fitnes2.utils.Logs
 
 
 class HomeViewModel(application: Application) : AndroidViewModel(application), ReportToModel, ShiftListener {
@@ -52,9 +51,11 @@ class HomeViewModel(application: Application) : AndroidViewModel(application), R
     }
 
     init {
-        val intent = Intent(application, MService::class.java)
-        application.startService(intent)
-        application.bindService(intent, mConnection, Context.BIND_AUTO_CREATE)
+        if (App.deviceState.isBind()) {
+            val intent = Intent(application, MService::class.java)
+            application.startService(intent)
+            application.bindService(intent, mConnection, Context.BIND_AUTO_CREATE)
+        }
     }
 
     override fun serverAvial(sevrerAvial: Boolean) {

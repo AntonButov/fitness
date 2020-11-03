@@ -5,14 +5,12 @@ import android.content.SharedPreferences
 import com.realsil.sdk.core.utility.SharedPrefesHelper
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.launch
 import pro.butovanton.fitnes2.App
 import pro.butovanton.fitnes2.App.Companion.app
 import pro.butovanton.fitnes2.InjectorUtils
-import pro.butovanton.fitnes2.util.Logs
-import pro.butovanton.fitnes2.util.Utils
-import pro.butovanton.fitness.net.JSONPlaceHolderApi
+import pro.butovanton.fitnes2.utils.Logs
+import pro.butovanton.fitnes2.utils.AndPermissionHelper.Utils
 
 class Shift(val context: Context, val shiftListener : ShiftListener) {
 

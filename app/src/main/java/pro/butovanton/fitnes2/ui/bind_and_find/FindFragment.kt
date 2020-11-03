@@ -1,10 +1,7 @@
 package pro.butovanton.fitnes2.ui.bind_and_find
 
-import android.bluetooth.BluetoothDevice
 import android.content.Intent
 import android.os.Bundle
-import android.preference.PreferenceManager
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -12,7 +9,6 @@ import android.widget.ListView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import com.google.gson.Gson
 import com.htsmart.wristband2.WristbandApplication
 import com.polidea.rxandroidble2.RxBleClient
 import com.polidea.rxandroidble2.scan.ScanResult
@@ -22,10 +18,8 @@ import pro.butovanton.fitnes2.App
 import pro.butovanton.fitnes2.MService
 import pro.butovanton.fitnes2.MainActivity
 import pro.butovanton.fitnes2.R
-import pro.butovanton.fitnes2.mock.DbMock
 import pro.butovanton.fitnes2.mock.User
 import pro.butovanton.fitnes2.mock.UserMock
-import pro.butovanton.fitnes2.util.Logs
 import pro.butovanton.fitnes2.utils.AndPermissionHelper
 import pro.butovanton.fitnes2.utils.Utils
 

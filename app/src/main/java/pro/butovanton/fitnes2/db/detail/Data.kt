@@ -33,6 +33,7 @@ data class Data(
     val sugar: Float,
     val temperature: Float,
     val breathung: Int,
+    val respiratoryRate: Int,
     val latitude: Double?,
     val longitude: Double?
 )

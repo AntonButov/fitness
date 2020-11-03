@@ -1,10 +1,8 @@
 package pro.butovanton.fitnes2.ui.log
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import pro.butovanton.fitnes2.db.blackbox.BlackBox
-import pro.butovanton.fitnes2.util.Logs
+import pro.butovanton.fitnes2.utils.Logs
 
 class LogViewModel : ViewModel() {
 

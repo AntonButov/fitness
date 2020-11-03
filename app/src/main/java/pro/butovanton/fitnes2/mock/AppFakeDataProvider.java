@@ -17,7 +17,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Random;
 
-import pro.butovanton.fitnes2.util.Utils;
+import pro.butovanton.fitnes2.utils.AndPermissionHelper;
 
 public class AppFakeDataProvider {
 
@@ -34,7 +34,7 @@ public class AppFakeDataProvider {
         Calendar calendar = Calendar.getInstance();
         Date date = new Date();
         long endTime = date.getTime();//Current time
-        long startTime = Utils.getDayStartTime(calendar, new Date()).getTime();//Today start time
+        long startTime = AndPermissionHelper.Utils.getDayStartTime(calendar, new Date()).getTime();//Today start time
 
         List<HeartRateData> items = new ArrayList<>();
         Random random = new Random();
@@ -67,7 +67,7 @@ public class AppFakeDataProvider {
         SleepData sleepData = new SleepData();
 
         Calendar calendar = Calendar.getInstance();
-        Date todayStartTime = Utils.getDayStartTime(calendar, new Date());//Today start time
+        Date todayStartTime = AndPermissionHelper.Utils.getDayStartTime(calendar, new Date());//Today start time
         sleepData.setTimeStamp(todayStartTime.getTime());
 
         List<SleepItemData> items = new ArrayList<>();
@@ -75,7 +75,7 @@ public class AppFakeDataProvider {
         Random random = new Random();
         int segmentCount = random.nextInt(3) + 4;
 
-        Date yesterdayStartTime = Utils.getExpireLimitTime(calendar, 1);
+        Date yesterdayStartTime = AndPermissionHelper.Utils.getExpireLimitTime(calendar, 1);
         yesterdayStartTime.setHours(random.nextInt(4) + 19);
         yesterdayStartTime.setMinutes(random.nextInt(60));
 

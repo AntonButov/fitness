@@ -61,6 +61,7 @@ class Shift(val context: Context) {
                 shift = SHIFTOFF
                 Logs.d("Смена, закрыта")
                 shiftCloseLive.postValue(shift)
+                Logs.deleteBlackBox()
             }
             else {
                 Logs.d("Смену закрыть не удалось")

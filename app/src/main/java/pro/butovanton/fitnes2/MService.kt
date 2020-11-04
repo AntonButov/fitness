@@ -24,6 +24,7 @@ class MService : Service() {
     lateinit var jobAllert : Job
     var jobBase : Job? = null
     lateinit var jobSendData : Job
+    var timeOutOnSendData = 5L
 
     lateinit var mStateDisposable : Disposable
 
@@ -78,9 +79,11 @@ class MService : Service() {
                         if (data?.device.equals("")) dao.deleteLast()
                         else {
                         Logs.d("Начало отправки данных на сервер.")
-                        if (api.postDetail(convertor.toRetrofit(data!!))) {
+                        val responseTimeOut = api.postDetail(convertor.toRetrofit(data!!))
+                        if (responseTimeOut != 99L) {
                             Logs.d("Данные отправлены.")
                             outServerAvial(true)
+                            timeOutOnSendData = responseTimeOut
                             dao.deleteLast()
                         }
                         else {
@@ -90,7 +93,7 @@ class MService : Service() {
                         }
 
                     }}
-                    delay(5 * 60000)
+                    delay(timeOutOnSendData * 60000)
             }
         }
 

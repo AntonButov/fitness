@@ -40,18 +40,22 @@ class Api(private val jSONPlaceHolderApi : JSONPlaceHolderApi ) {
         }
     }
 
-    suspend fun postDetail(detail: Detail): Boolean {
+    suspend fun postDetail(detail: Detail): Long {
         return suspendCoroutine { cont ->
             jSONPlaceHolderApi.postDetail(detail = detail).enqueue(object : Callback<ResponseBody> {
                 override fun onResponse(
                     call: Call<ResponseBody>,
                     response: Response<ResponseBody>
                 ) {
-                    cont.resume(response.code() == 200)
+                    var timeOut = response.body()?.string()
+                    if (timeOut == null)
+                        timeOut = "5"
+                    Logs.d("Задержка от сервера = " + timeOut)
+                    cont.resume(timeOut.toLong())
                 }
 
                 override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
-                    cont.resume(false)
+                    cont.resume(99L)
                 }
             })
         }

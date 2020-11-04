@@ -23,7 +23,6 @@ import pro.butovanton.fitnes2.db.blackbox.BlackboxDao
 import pro.butovanton.fitnes2.db.detail.AppDatabase
 import pro.butovanton.fitnes2.db.detail.FitnessDao
 import pro.butovanton.fitnes2.shift.Shift
-import pro.butovanton.fitnes2.shift.ShiftListener
 import pro.butovanton.fitness.net.Api
 import pro.butovanton.fitness.net.JSONPlaceHolderApi
 import pro.butovanton.fitness.net.NetworkService

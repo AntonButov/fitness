@@ -1,7 +1,6 @@
 package pro.butovanton.fitnes2.ui.home
 
 import android.app.Application
-import android.app.Service
 import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
@@ -17,8 +16,6 @@ import pro.butovanton.fitnes2.InjectorUtils
 import pro.butovanton.fitnes2.MService
 import pro.butovanton.fitnes2.MService.LocalBinder
 import pro.butovanton.fitnes2.ReportToModel
-import pro.butovanton.fitnes2.shift.ShiftListener
-import pro.butovanton.fitnes2.utils.Logs
 
 
 class HomeViewModel(application: Application) : AndroidViewModel(application), ReportToModel {

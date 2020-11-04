@@ -3,7 +3,6 @@ package pro.butovanton.fitnes2
 import android.app.*
 import android.content.Context
 import android.content.Intent
-import android.content.Intent.getIntent
 import android.os.Binder
 import android.os.Build
 import android.os.IBinder
@@ -13,8 +12,9 @@ import io.reactivex.disposables.Disposable
 import kotlinx.coroutines.*
 import pro.butovanton.fitnes2.db.detail.DataClass
 import pro.butovanton.fitnes2.net.Convertor
-import pro.butovanton.fitnes2.utils.Logs
+import pro.butovanton.fitnes2.net.retrofitDataClass.AlertResponse
 import pro.butovanton.fitnes2.utils.AndPermissionHelper.Utils
+import pro.butovanton.fitnes2.utils.Logs
 
 class MService : Service() {
 
@@ -23,6 +23,7 @@ class MService : Service() {
     private val mBinder: IBinder = LocalBinder()
     lateinit var jobAllert : Job
     var jobBase : Job? = null
+    var jobShowAlerts : Job? = null
     lateinit var jobSendData : Job
     var timeOutOnSendData = 5L
 
@@ -49,11 +50,16 @@ class MService : Service() {
         jobAllert = GlobalScope.launch(Dispatchers.Main) {
             while (true) {
                 if ((App).deviceState.isBind()) {
-                    val serverAvial = serverAvial()
-                    Logs.d("ServerAvable from service = " + serverAvial)
-                    outServerAvial(serverAvial)
+                    val allerts = serverAvial()
+                    if (allerts != null) {
+                        Logs.d("Количество allert = " + allerts.size)
+                        if (allerts.size > 0) {
+                            showAllert(allerts)
+                        }
+                    }
+                    outServerAvial(allerts != null)
                 }
-                delay(60000)
+                delay(timeOutOnSendData * 60000)
             }
         }
 
@@ -128,14 +134,9 @@ class MService : Service() {
         bataryCash = batary.percentage
     }
 
-    private suspend fun serverAvial(): Boolean {
-        try {
-            val response = api.alert("00000000-0000-0000-0000-" + Utils.del2dot(App.deviceState.device?.address!!))
-            return true
-        }
-        catch (t: Throwable) {
-            return false
-        }
+    private suspend fun serverAvial(): List<AlertResponse>? {
+        val allerts = api.alert("00000000-0000-0000-0000-" + Utils.del2dot(App.deviceState.device?.address!!))
+    return allerts
     }
 
     private fun outServerAvial(serverAvial: Boolean) {
@@ -207,7 +208,22 @@ private fun updateNotification(context: Context): Notification? {
         super.onDestroy()
         jobAllert.cancel()
         jobBase?.cancel()
+        jobShowAlerts?.cancel()
         deviceClass.stop()
         Logs.d("Service destroy.")
     }
+
+     suspend fun showAllert(allerts: List<AlertResponse>) {
+
+         GlobalScope.launch {
+             startActivity(Intent(this@MService,AllertActivity::class.java))
+
+             Logs.d("Показ аллертов 1")
+             delay(6000)
+             Logs.d("Показ аллертов 2")
+             delay(6000)
+             Logs.d("Показ аллертов 3")
+             delay(6000)
+         }
+     }
 }

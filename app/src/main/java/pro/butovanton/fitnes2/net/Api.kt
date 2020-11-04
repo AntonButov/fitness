@@ -34,7 +34,7 @@ class Api(private val jSONPlaceHolderApi : JSONPlaceHolderApi ) {
                 }
 
                 override fun onFailure(call: Call<List<AlertResponse>>, t: Throwable) {
-                    cont.resumeWithException(t)
+
                 }
             })
         }

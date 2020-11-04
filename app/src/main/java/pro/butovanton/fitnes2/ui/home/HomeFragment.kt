@@ -129,11 +129,12 @@ class HomeFragment : Fragment() {
                 }
             })
         }
-        model.openShift().observe(viewLifecycleOwner, object : Observer<Int> {
-            override fun onChanged(shift : Int) {
-                setShift(shift)
-            }
-        })
+        if (App.deviceState.isBind())
+                model.openShift().observe(viewLifecycleOwner, object : Observer<Int> {
+                     override fun onChanged(shift : Int) {
+                        setShift(shift)
+                     }
+                })
         setShift(model.getShift())
 
         timerTV = root.findViewById(R.id.timerTV)

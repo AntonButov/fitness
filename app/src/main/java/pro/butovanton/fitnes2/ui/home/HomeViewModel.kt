@@ -16,6 +16,7 @@ import pro.butovanton.fitnes2.InjectorUtils
 import pro.butovanton.fitnes2.MService
 import pro.butovanton.fitnes2.MService.LocalBinder
 import pro.butovanton.fitnes2.ReportToModel
+import pro.butovanton.fitnes2.utils.Logs
 
 
 class HomeViewModel(application: Application) : AndroidViewModel(application), ReportToModel {

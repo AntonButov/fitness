@@ -20,7 +20,7 @@ class MService : Service() {
     var reportToModel : ReportToModel? = null
         set(value) { field = value }
     private val mBinder: IBinder = LocalBinder()
-    lateinit var job : Job
+    lateinit var jobAllert : Job
     var jobBase : Job? = null
     lateinit var jobSendData : Job
 
@@ -42,8 +42,9 @@ class MService : Service() {
     private val dao = InjectorUtils.provideDao()
 
     override fun onCreate() {
-        super.onCreate() /*
-        job = GlobalScope.launch(Dispatchers.Main) {
+        super.onCreate()
+
+        jobAllert = GlobalScope.launch(Dispatchers.Main) {
             while (true) {
                 if ((App).deviceState.isBind()) {
                     val serverAvial = serverAvial()
@@ -54,7 +55,6 @@ class MService : Service() {
             }
         }
 
-*/
         mStateDisposable = deviceClass.connecterObserver()
             .subscribe { connectionState ->
                 Logs.d("connected state " + connectionState.toString())
@@ -72,12 +72,12 @@ class MService : Service() {
         jobSendData = GlobalScope.launch(Dispatchers.IO) {
             val convertor = Convertor()
             while (true) {
-                    val data = dao.getLastData()
-                    if (data != null) {
-                        if (data.device.equals("")) dao.deleteLast()
+                    while (dao.getLastData() != null) {
+                        val data = dao.getLastData()
+                        if (data?.device.equals("")) dao.deleteLast()
                         else {
                         Logs.d("Начало отправки данных на сервер.")
-                        if (api.postDetail(convertor.toRetrofit(data))) {
+                        if (api.postDetail(convertor.toRetrofit(data!!))) {
                             Logs.d("Данные отправлены.")
                             dao.deleteLast()
                         }
@@ -85,12 +85,7 @@ class MService : Service() {
                             Logs.d("Отправить не удалось.")
 
                     }}
-                    if ((App).deviceState.isBind()) {
-                           val serverAvial = serverAvial()
-                           Logs.d("ServerAvable from service = " + serverAvial)
-                           outServerAvial(serverAvial)
-                    }
-                    delay(60000)
+                    delay(5 * 60000)
             }
         }
 
@@ -194,7 +189,7 @@ private fun updateNotification(context: Context): Notification? {
 
     override fun onDestroy() {
         super.onDestroy()
-        job.cancel()
+        jobAllert.cancel()
         jobBase?.cancel()
         deviceClass.stop()
         Logs.d("Service destroy.")

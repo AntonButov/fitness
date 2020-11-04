@@ -1,6 +1,7 @@
 package pro.butovanton.fitnes2.ui.home
 
-import android.content.BroadcastReceiver
+import android.app.AlertDialog
+import android.content.*
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -15,6 +16,9 @@ import com.htsmart.wristband2.bean.ConnectionState
 import kotlinx.android.synthetic.main.fragment_home.*
 import kotlinx.coroutines.InternalCoroutinesApi
 import pro.butovanton.fitnes2.R
+import pro.butovanton.fitnes2.shift.Shift
+import java.text.SimpleDateFormat
+import java.util.*
 
 
 class HomeFragment : Fragment() {
@@ -22,6 +26,8 @@ class HomeFragment : Fragment() {
     private val model: HomeViewModel by viewModels()
     private lateinit var timerTV : TextView
     private lateinit var smartBataryTV : TextView
+    private lateinit var tickReceiver : BroadcastReceiver
+    private lateinit var shiftBT : Button
 
     @InternalCoroutinesApi
     override fun onCreateView(
@@ -77,40 +83,67 @@ class HomeFragment : Fragment() {
 
         })
 
-
-        val shiftB = root.findViewById(R.id.shiftB) as Button
-        shiftB.setOnClickListener {
-            model.changeShift()
-        }
-
-        model.shiftLive.observe(viewLifecycleOwner, object : Observer<Boolean> {
-            override fun onChanged(shiftReal: Boolean?) {
-                when (shiftReal) {
-                    true -> shiftB.setText("Открытие смены.")
-                    false -> shiftB.setText("Окончание смены.")
+        shiftBT = root.findViewById(R.id.shiftB) as Button
+        shiftBT.setOnClickListener {
+            model.closeShift().observe(viewLifecycleOwner, object : Observer<Int> {
+                override fun onChanged(shift: Int) {
+                    val dialogFinishWork = AlertDialog
+                        .Builder(context)
+                        .setTitle("Работа закончена")
+                        .setMessage("Можно выключить телефон.")
+                        .setPositiveButton("Ок", object : DialogInterface.OnClickListener {
+                            override fun onClick(dialog: DialogInterface?, which: Int) {
+                                activity?.finish()
+                            }
+                        })
+                        .create()
+                    dialogFinishWork.show()
+                    setShift(shift)
                 }
+            })
+        }
+        model.openShift().observe(viewLifecycleOwner, object : Observer<Int> {
+            override fun onChanged(shift : Int) {
+                setShift(shift)
             }
         })
+        setShift(model.getShift())
 
         timerTV = root.findViewById(R.id.timerTV)
         smartBataryTV = root.findViewById(R.id.chargeSmartTV)
-     //   lifecycleScope.launchWhenCreated {
-       //     while (true) {
-        //        val sdf = SimpleDateFormat("HH:mm")
-       //         val currentDate = sdf.format(Date())
-       //         timerTV.text = currentDate
-      //          smartBataryTV.text = model.getBataryPercent().toString() + "%"
-      //          delay(30000)
-      //      }
-     //   }
 
-        var tickReceiver: BroadcastReceiver
+
+        tickReceiver = object : BroadcastReceiver() {
+            override fun onReceive(context: Context?, intent: Intent) {
+                if (intent.action!!.compareTo(Intent.ACTION_TIME_TICK) == 0) {
+                  setTimeAndBatary()
+                }
+            }
+        }
+
+        context?.registerReceiver(tickReceiver, IntentFilter(Intent.ACTION_TIME_TICK))
+
+        setTimeAndBatary()
 
         return root
     }
 
-    override fun onResume() {
-        super.onResume()
+    fun setShift(shift : Int) {
+        when (shift) {
+            Shift.SHIFTONN -> shiftBT.visibility = View.VISIBLE;
+            Shift.SHIFTOFF -> shiftBT.visibility = View.VISIBLE;
+        }
+    }
 
+    fun setTimeAndBatary() {
+        val sdf = SimpleDateFormat("HH:mm")
+        val currentDate = sdf.format(Date())
+        timerTV.text = currentDate
+        smartBataryTV.text = model.getBataryPercent().toString() + "%"
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        activity?.unregisterReceiver(tickReceiver)
     }
 }

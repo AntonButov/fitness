@@ -7,6 +7,7 @@ import android.content.Intent
 import android.content.ServiceConnection
 import android.os.IBinder
 import androidx.lifecycle.AndroidViewModel
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.htsmart.wristband2.bean.ConnectionState
 import pro.butovanton.fitnes2.App
@@ -18,7 +19,7 @@ import pro.butovanton.fitnes2.shift.ShiftListener
 import pro.butovanton.fitnes2.utils.Logs
 
 
-class HomeViewModel(application: Application) : AndroidViewModel(application), ReportToModel, ShiftListener {
+class HomeViewModel(application: Application) : AndroidViewModel(application), ReportToModel {
 
     private lateinit var mService : MService
     private var mBound = false
@@ -26,9 +27,8 @@ class HomeViewModel(application: Application) : AndroidViewModel(application), R
     val deviceStateLive : MutableLiveData<ConnectionState> = MutableLiveData()
     val deviceBataryLive : MutableLiveData<Int> = MutableLiveData()
     private val mapplication = application
-    val shiftLive = MutableLiveData<Boolean>()
 
-    private  val shift = InjectorUtils.provideShift(this)
+    private  val shift = InjectorUtils.provideShift()
 
     private val mConnection: ServiceConnection = object : ServiceConnection {
         override fun onServiceConnected(
@@ -76,13 +76,17 @@ class HomeViewModel(application: Application) : AndroidViewModel(application), R
         return batary.getBatteryPercentage(mapplication)
     }
 
-    override fun shift(shift: Boolean) {
-        shiftLive.value = shift
-        Logs.d(" Shift = " + shift)
+    fun getShift() : Int {
+        return shift.shift
     }
 
-    fun changeShift() {
-        shift.changeShift()
+    fun openShift() : LiveData<Int> {
+         return shift.openShift()
     }
+
+    fun closeShift() : LiveData<Int>{
+       return shift.closeShift()
+       }
+
 }
 

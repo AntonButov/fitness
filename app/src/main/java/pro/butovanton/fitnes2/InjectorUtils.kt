@@ -17,6 +17,7 @@
 package pro.butovanton.fitnes2
 
 import android.content.Context
+import pro.butovanton.fitnes2.App.Companion.app
 import pro.butovanton.fitnes2.db.blackbox.AppDatabaseBlackBox
 import pro.butovanton.fitnes2.db.blackbox.BlackboxDao
 import pro.butovanton.fitnes2.db.detail.AppDatabase
@@ -73,8 +74,8 @@ object InjectorUtils {
         return AppDatabaseBlackBox.DB
     }
 
-    fun provideShift(listenerShift : ShiftListener): Shift {
-        return Shift(provideContext(), listenerShift)
+    fun provideShift(): Shift {
+        return Shift(app)
     }
 
 }

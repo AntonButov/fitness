@@ -87,18 +87,43 @@ class HomeFragment : Fragment() {
         shiftBT.setOnClickListener {
             model.closeShift().observe(viewLifecycleOwner, object : Observer<Int> {
                 override fun onChanged(shift: Int) {
-                    val dialogFinishWork = AlertDialog
-                        .Builder(context)
-                        .setTitle("Работа закончена")
-                        .setMessage("Можно выключить телефон.")
-                        .setPositiveButton("Ок", object : DialogInterface.OnClickListener {
-                            override fun onClick(dialog: DialogInterface?, which: Int) {
-                                activity?.finish()
-                            }
-                        })
-                        .create()
-                    dialogFinishWork.show()
-                    setShift(shift)
+                    when (shift) {
+                       Shift.SHIFTOFF -> {
+                           val dialogFinishWork = AlertDialog
+                               .Builder(context)
+                               .setTitle("Работа закончена")
+                               .setMessage("Смена окончена успешно." + "\n" +
+                                           "Можно выключить телефон")
+                               .setPositiveButton("Ок", object : DialogInterface.OnClickListener {
+                                   override fun onClick(dialog: DialogInterface?, which: Int) {
+                                       activity?.finish()
+                                   }
+                               })
+                               .create()
+                           dialogFinishWork.show()
+                           setShift(shift)
+                       }
+                        Shift.SHIFTONN -> {
+                            val dialogFinishWork = AlertDialog
+                                .Builder(context)
+                                .setTitle("")
+                                .setMessage("Окончание смены не завершено." + "\n" +
+                                            "Повторить да/нет")
+                                .setPositiveButton("Да", object : DialogInterface.OnClickListener {
+                                    override fun onClick(dialog: DialogInterface?, which: Int) {
+                                        model.closeShift()
+                                    }
+                                })
+                                .setNegativeButton("нет",  object : DialogInterface.OnClickListener {
+                                    override fun onClick(dialog: DialogInterface?, which: Int) {
+                                        sevriceGo()
+                                    }
+                                })
+                                .create()
+                            dialogFinishWork.show()
+                            setShift(shift)
+                        }
+                    }
                 }
             })
         }
@@ -140,6 +165,21 @@ class HomeFragment : Fragment() {
         val currentDate = sdf.format(Date())
         timerTV.text = currentDate
         smartBataryTV.text = model.getBataryPercent().toString() + "%"
+    }
+
+    fun sevriceGo() {
+        val dialogFinishWork = AlertDialog
+            .Builder(context)
+            .setTitle("")
+            .setMessage("Смена незакончена." + "\n" +
+                    "Необходимо посетить IT отдел")
+            .setPositiveButton("Ок", object : DialogInterface.OnClickListener {
+                override fun onClick(dialog: DialogInterface?, which: Int) {
+                    activity?.finish()
+                }
+            })
+            .create()
+        dialogFinishWork.show()
     }
 
     override fun onDestroy() {

@@ -44,6 +44,7 @@ class Shift(val context: Context) {
             GlobalScope.launch(Dispatchers.Main)  {
                 if (api.workShift("00000000-0000-0000-0000-" + Utils.del2dot(App.deviceState.device?.address!!),true) == Api.OK) {
                     shift = SHIFTONN
+                    Logs.d("Смена, открыта")
                     shiftOpenLive.postValue(shift)
                 }
                 else {
@@ -58,10 +59,12 @@ class Shift(val context: Context) {
         GlobalScope.launch(Dispatchers.Main)  {
             if (api.workShift("00000000-0000-0000-0000-" + Utils.del2dot(App.deviceState.device?.address!!),false) == Api.OK) {
                 shift = SHIFTOFF
+                Logs.d("Смена, закрыта")
                 shiftCloseLive.postValue(shift)
             }
             else {
-                // Вызов повтора закрытия смены
+                Logs.d("Смену закрыть не удалось")
+                shiftCloseLive.postValue(SHIFTONN)
             }
         }
         return  shiftCloseLive

@@ -1,6 +1,7 @@
 package pro.butovanton.fitnes2.ui.home
 
 import android.app.Application
+import android.app.Service
 import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
@@ -11,6 +12,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.htsmart.wristband2.bean.ConnectionState
 import pro.butovanton.fitnes2.App
+import pro.butovanton.fitnes2.App.Companion.app
 import pro.butovanton.fitnes2.InjectorUtils
 import pro.butovanton.fitnes2.MService
 import pro.butovanton.fitnes2.MService.LocalBinder
@@ -52,10 +54,21 @@ class HomeViewModel(application: Application) : AndroidViewModel(application), R
 
     init {
         if (App.deviceState.isBind()) {
-            val intent = Intent(application, MService::class.java)
-            application.startService(intent)
-            application.bindService(intent, mConnection, Context.BIND_AUTO_CREATE)
+            val intent = Intent(app, MService::class.java)
+            app.startService(intent)
+            app.bindService(intent, mConnection, Context.BIND_AUTO_CREATE)
+
         }
+    }
+
+    fun stopService() {
+        App.deviceState.shotDown()
+        val intent = Intent(app, MService::class.java)
+        app.startService(intent)
+        app.bindService(intent, mConnection, Context.BIND_AUTO_CREATE)
+        app.stopService(intent)
+        app.unbindService(mConnection)
+
     }
 
     override fun serverAvial(sevrerAvial: Boolean) {

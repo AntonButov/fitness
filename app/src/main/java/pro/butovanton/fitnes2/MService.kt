@@ -3,6 +3,7 @@ package pro.butovanton.fitnes2
 import android.app.*
 import android.content.Context
 import android.content.Intent
+import android.content.Intent.getIntent
 import android.os.Binder
 import android.os.Build
 import android.os.IBinder
@@ -79,10 +80,14 @@ class MService : Service() {
                         Logs.d("Начало отправки данных на сервер.")
                         if (api.postDetail(convertor.toRetrofit(data!!))) {
                             Logs.d("Данные отправлены.")
+                            outServerAvial(true)
                             dao.deleteLast()
                         }
-                        else
+                        else {
+                            outServerAvial(false)
                             Logs.d("Отправить не удалось.")
+                            delay(10000)
+                        }
 
                     }}
                     delay(5 * 60000)
@@ -136,15 +141,23 @@ class MService : Service() {
     }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
-        if ((App).deviceState.isBind()) {
-            if (!deviceClass.isConnected()) {
-                    deviceClass.connect(this)
+        val state = App.deviceState
+        when (state.shotDown) {
+            true -> {
+                deviceClass.disConnect()
+                App.deviceState.shotDown = false
+            }
+            false -> {
+                if (state.isBind()) {
+                    if (!deviceClass.isConnected()) {
+                        deviceClass.connect(this)
+                    }
+                } else
+                    if (deviceClass.isConnected()) {
+                        deviceClass.disConnect()
+                    }
             }
         }
-        else
-            if (deviceClass.isConnected()) {
-                deviceClass.disConnect()
-            }
 
         return START_STICKY
     }
@@ -178,8 +191,8 @@ private fun updateNotification(context: Context): Notification? {
     }
 
     override fun onUnbind(intent: Intent?): Boolean {
-        return super.onUnbind(intent)
         Logs.d("Service unBind.")
+        return super.onUnbind(intent)
     }
 
     override fun onTaskRemoved(rootIntent: Intent?) {

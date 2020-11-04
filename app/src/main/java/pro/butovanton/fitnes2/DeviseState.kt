@@ -13,6 +13,12 @@ class DeviseState {
             saveToDivice(value)
         }
 
+    var shotDown = false
+
+    fun shotDown() {
+        shotDown = true
+    }
+
     private fun saveToDivice(device: BluetoothDevice?) {
         val prefs: SharedPreferences = SharedPrefesHelper.getSharedPreferences(App.app, "device")
         var deviceString = ""

@@ -22,7 +22,9 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <service android:name=".MService" />
+        <service
+            android:enabled="true"
+            android:name=".MService" />
     </application>
 
     <!--In most cases, you need to ensure that the device supports BLE.-->

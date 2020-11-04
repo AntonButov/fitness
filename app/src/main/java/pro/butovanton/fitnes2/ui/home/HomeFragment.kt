@@ -15,6 +15,7 @@ import com.bumptech.glide.Glide
 import com.htsmart.wristband2.bean.ConnectionState
 import kotlinx.android.synthetic.main.fragment_home.*
 import kotlinx.coroutines.InternalCoroutinesApi
+import pro.butovanton.fitnes2.App
 import pro.butovanton.fitnes2.R
 import pro.butovanton.fitnes2.shift.Shift
 import java.text.SimpleDateFormat
@@ -96,6 +97,7 @@ class HomeFragment : Fragment() {
                                            "Можно выключить телефон")
                                .setPositiveButton("Ок", object : DialogInterface.OnClickListener {
                                    override fun onClick(dialog: DialogInterface?, which: Int) {
+                                       model.stopService()
                                        activity?.finish()
                                    }
                                })

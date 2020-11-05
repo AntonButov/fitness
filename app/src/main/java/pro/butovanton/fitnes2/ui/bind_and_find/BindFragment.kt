@@ -1,5 +1,6 @@
 package pro.butovanton.fitnes2.ui.bind_and_find
 
+import android.app.Activity
 import android.bluetooth.BluetoothDevice
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -13,10 +14,14 @@ import kotlinx.android.synthetic.main.fragment_bind.*
 import pro.butovanton.fitnes2.App
 import pro.butovanton.fitnes2.MainActivity
 import pro.butovanton.fitnes2.R
+import pro.butovanton.fitnes2.ui.PasswordDialog
+import pro.butovanton.fitnes2.ui.PasswordListener
+import kotlin.concurrent.fixedRateTimer
 
-class BindFragment : Fragment() {
+class BindFragment : Fragment(), PasswordListener {
 
     private val model: BindViewModel by viewModels()
+    lateinit var activityMy : MainActivity
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -31,12 +36,24 @@ class BindFragment : Fragment() {
            val deviceTV = root.findViewById(R.id.deviceTV) as TextView
            deviceTV.text = model.getName()
        }
-
         val unBindB = root.findViewById<Button>(R.id.unBindB)
         unBindB.setOnClickListener {
             model.unBind(requireActivity())
             (activity as MainActivity).navController.navigate(R.id.action_nav_bind_to_nav_find_devices)
         }
+
+        val passwordDialog = PasswordDialog(this)
+        passwordDialog.show(requireFragmentManager(), "passwordDialog")
+
         return root
+    }
+
+    override fun passwordFailure() {
+        activityMy.navController.popBackStack()
+    }
+
+    override fun onAttach(activity: Activity) {
+        super.onAttach(activity)
+        activityMy = activity as MainActivity
     }
 }

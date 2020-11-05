@@ -2,6 +2,7 @@ package pro.butovanton.fitness.net
 
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
+import pro.butovanton.fitnes2.App
 import pro.butovanton.fitnes2.net.UnsafeOkHttpClient
 import pro.butovanton.fitness.net.JSONPlaceHolderApi
 import retrofit2.Retrofit
@@ -14,7 +15,8 @@ class NetworkService private constructor() {
 
     companion object {
         private var mInstance: NetworkService? = null
-        private const val BASE_URL = "https://212.248.50.40:8080/v1/"
+        val ipPort = App.deviceState.ipPorv
+        private  var BASE_URL = ipPort + "/v1/"
         val instance: NetworkService?
             get() {
                 if (mInstance == null) {

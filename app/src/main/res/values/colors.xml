@@ -4,4 +4,10 @@
     <color name="colorPrimaryDark">#3700B3</color>
     <color name="colorAccent">#03DAC5</color>
     <color name="colorWhite">#FFFFFF</color>
+
+    <color name="fivexx">#D34513</color>
+    <color name="fourxx">#F8CD46</color>
+    <color name="threexx">#31780F</color>
+    <color name="twoxx">#FFFFFF</color>
+
 </resources>

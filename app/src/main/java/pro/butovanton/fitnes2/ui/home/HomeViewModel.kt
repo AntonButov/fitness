@@ -55,15 +55,16 @@ class HomeViewModel(application: Application) : AndroidViewModel(application), R
             val intent = Intent(app, MService::class.java)
             app.startService(intent)
             app.bindService(intent, mConnection, Context.BIND_AUTO_CREATE)
-
         }
     }
 
     fun stopService() {
+        mService.disconnect()
         App.deviceState.shotDown()
         val intent = Intent(app, MService::class.java)
-        app.startService(intent)
-        app.bindService(intent, mConnection, Context.BIND_AUTO_CREATE)
+       // app.startService(intent)
+       // app.bindService(intent, mConnection, Context.BIND_AUTO_CREATE)
+
         app.stopService(intent)
         app.unbindService(mConnection)
 

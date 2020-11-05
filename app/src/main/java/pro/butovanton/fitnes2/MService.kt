@@ -99,7 +99,7 @@ class MService : Service() {
                         }
 
                     }}
-                    delay(timeOutOnSendData * 60000)
+                    delay(60000)
             }
         }
 
@@ -122,7 +122,7 @@ class MService : Service() {
                         dao.insertLast(data.getMOdelToRoom())
                         Logs.d("Данные записаны в БД " + it.toString())
                     }
-            delay(20000)
+            delay(timeOutOnSendData * 60000)
             }
         }
     }
@@ -164,6 +164,10 @@ class MService : Service() {
         }
 
         return START_STICKY
+    }
+
+    fun disconnect() {
+        deviceClass.disConnect()
     }
 
 private fun updateNotification(context: Context): Notification? {
@@ -214,10 +218,9 @@ private fun updateNotification(context: Context): Notification? {
     }
 
      suspend fun showAllert(allerts: List<AlertResponse>) {
-
+         App.deviceState.allerts = allerts
          GlobalScope.launch {
              startActivity(Intent(this@MService,AllertActivity::class.java))
-
              Logs.d("Показ аллертов 1")
              delay(6000)
              Logs.d("Показ аллертов 2")

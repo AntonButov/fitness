@@ -10,7 +10,7 @@
     android:paddingTop="4dp">
 
     <TextView
-        android:id="@+id/tv_address"
+        android:id="@+id/messageTV"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>
 

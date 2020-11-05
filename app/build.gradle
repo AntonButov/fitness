@@ -26,8 +26,8 @@ android {
         applicationId "pro.butovanton.fitnes2"
         minSdkVersion 19
         targetSdkVersion 30
-        versionCode 3
-        versionName "2.1"
+        versionCode 4
+        versionName "2.5"
         multiDexEnabled true
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 

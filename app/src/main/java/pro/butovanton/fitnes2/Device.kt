@@ -38,7 +38,8 @@ class Device {
                 mWristbandManager.connect(
                     device!!,
                     String.valueOf(mUser.getId()),
-                    !isBind,
+                    //!isBind,
+                    true,
                     mUser.isSex(),
                     mUser.getAge(),
                     mUser.getHeight(),

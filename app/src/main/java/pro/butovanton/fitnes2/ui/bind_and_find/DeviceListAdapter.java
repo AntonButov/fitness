@@ -64,7 +64,7 @@ public class DeviceListAdapter extends BaseAdapter {
         if (convertView == null) {
             convertView = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_device_list, parent, false);
             holder = new ViewHolder();
-            holder.tv_address = convertView.findViewById(R.id.tv_address);
+            holder.tv_address = convertView.findViewById(R.id.messageTV);
             holder.tv_name = convertView.findViewById(R.id.tv_name);
             holder.tv_rssi = convertView.findViewById(R.id.tv_rssi);
             convertView.setTag(holder);

@@ -6,14 +6,15 @@ import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.DialogFragment
+import pro.butovanton.fitnes2.R
 
 
-class AllertDialog() : DialogFragment() {
+class PasswordDialog() : DialogFragment() {
 
-    /*
+
     companion object {
-        fun newInstance(bundle1: Bundle, bundle: List<AlertResponse>): AllertDialog {
-            val fragment = AllertDialog(allerts)
+        fun newInstance(bundle: Bundle) :  PasswordDialog {
+            val fragment = PasswordDialog()
             fragment.arguments = bundle
             return fragment
         }
@@ -23,16 +24,9 @@ class AllertDialog() : DialogFragment() {
         val inflater = requireActivity().layoutInflater
         val v: View = inflater.inflate(R.layout.allert_dialog_view, null)
 
-        val viewManager = LinearLayoutManager(this)
-        val adapterGuest = AllertAdapter(allerts)
-
-        v.findViewById<RecyclerView>(R.id.allertRV).apply {
-            layoutManager = viewManager
-            adapter = adapterGuest
-        }
 
        return AlertDialog.Builder(requireActivity())
-            .setTitle("Внимание!")
+            .setTitle("Введите пароль")
             .setView(v)
             .setPositiveButton("Согласен") { dialog: DialogInterface?, which: Int -> }
             .setCancelable(false)
@@ -41,7 +35,5 @@ class AllertDialog() : DialogFragment() {
            }
             .create()
     }
+Ъ
 
-
- */
-}

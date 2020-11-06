@@ -41,6 +41,7 @@ class Shift(val context: Context) {
     }
 
     fun openShift() : LiveData<Int> {
+        if (shift == SHIFTOFF)
             GlobalScope.launch(Dispatchers.Main)  {
                 if (api.workShift("00000000-0000-0000-0000-" + Utils.del2dot(App.deviceState.device?.address!!),true) == Api.OK) {
                     shift = SHIFTONN

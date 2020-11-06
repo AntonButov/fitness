@@ -59,7 +59,7 @@ class MService : Service() {
                     }
                     outServerAvial(allerts != null)
                 }
-                delay(timeOutOnSendData * 60000)
+                delay(60000)
             }
         }
 
@@ -99,7 +99,7 @@ class MService : Service() {
                         }
 
                     }}
-                    delay(60000)
+                    delay(timeOutOnSendData * 60000)
             }
         }
 

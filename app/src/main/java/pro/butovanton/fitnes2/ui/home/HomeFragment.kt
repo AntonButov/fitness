@@ -101,9 +101,9 @@ class HomeFragment : Fragment() {
                                        activity?.finish()
                                    }
                                })
+                               .setCancelable(false)
                                .create()
                            dialogFinishWork.show()
-                           setShift(shift)
                        }
                         Shift.SHIFTONN -> {
                             val dialogFinishWork = AlertDialog
@@ -123,19 +123,12 @@ class HomeFragment : Fragment() {
                                 })
                                 .create()
                             dialogFinishWork.show()
-                            setShift(shift)
                         }
                     }
                 }
             })
         }
-        if (App.deviceState.isBind())
-                model.openShift().observe(viewLifecycleOwner, object : Observer<Int> {
-                     override fun onChanged(shift : Int) {
-                        setShift(shift)
-                     }
-                })
-        setShift(model.getShift())
+        setShift()
 
         timerTV = root.findViewById(R.id.timerTV)
         smartBataryTV = root.findViewById(R.id.chargeSmartTV)
@@ -156,10 +149,10 @@ class HomeFragment : Fragment() {
         return root
     }
 
-    fun setShift(shift : Int) {
-        when (shift) {
-            Shift.SHIFTONN -> shiftBT.visibility = View.VISIBLE;
-            Shift.SHIFTOFF -> shiftBT.visibility = View.VISIBLE;
+    fun setShift() {
+        when (App.deviceState.isBind()) {
+            true -> shiftBT.visibility = View.VISIBLE;
+            false -> shiftBT.visibility = View.INVISIBLE;
         }
     }
 

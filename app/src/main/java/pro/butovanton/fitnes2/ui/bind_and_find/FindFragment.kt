@@ -48,7 +48,7 @@ class FindFragment : Fragment() {
             val device = result.bleDevice.bluetoothDevice
             (App).deviceState.bind(device)
             startService()
-            (activity as MainActivity).navController.navigate(R.id.action_nav_find_devices_to_nav_bind)
+            (activity as MainActivity).navController.navigate(R.id.action_nav_find_devices_to_nav_main)
         }
 
         mRxBleClient = WristbandApplication.getRxBleClient()

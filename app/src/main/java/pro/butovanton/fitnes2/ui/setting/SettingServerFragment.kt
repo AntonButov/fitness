@@ -29,7 +29,9 @@ class SettingServerFragment : Fragment() , PasswordListener{
         }
 
         val passwordDialog = PasswordDialog(this)
+        passwordDialog.isCancelable = false
         passwordDialog.show(requireFragmentManager(), "passwordDialog")
+
         return root
     }
 

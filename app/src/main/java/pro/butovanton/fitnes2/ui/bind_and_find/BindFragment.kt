@@ -8,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.TextView
+import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import kotlinx.android.synthetic.main.fragment_bind.*
@@ -43,6 +44,7 @@ class BindFragment : Fragment(), PasswordListener {
         }
 
         val passwordDialog = PasswordDialog(this)
+        passwordDialog.isCancelable = false
         passwordDialog.show(requireFragmentManager(), "passwordDialog")
 
         return root

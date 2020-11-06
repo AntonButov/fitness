@@ -14,7 +14,7 @@ import pro.butovanton.fitnes2.R
 class PasswordDialog(val mPasswordListener : PasswordListener) : DialogFragment() {
 
     companion object {
-        val PASSWORD = "1997"
+        val PASSWORD = "iHealth"
         fun newInstance(bundle: Bundle, passwordListener : PasswordListener): PasswordDialog {
             val fragment = PasswordDialog(passwordListener)
             fragment.arguments = bundle

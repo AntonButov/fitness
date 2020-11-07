@@ -16,7 +16,7 @@ class Convertor {
                                data.pressureSystol),
                       data.oxygen,
                       data.sugar,
-                      data.temperature,
+                      data.temperaturebody,
                       data.breathung,
                       data.respiratoryRate,
                       Coordinates(data.latitude,

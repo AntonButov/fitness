@@ -8,6 +8,7 @@ import android.os.Build
 import android.os.IBinder
 import androidx.core.app.NotificationCompat
 import com.htsmart.wristband2.bean.ConnectionState
+import com.htsmart.wristband2.bean.HealthyDataResult
 import io.reactivex.disposables.Disposable
 import kotlinx.coroutines.*
 import pro.butovanton.fitnes2.db.detail.DataClass
@@ -15,6 +16,7 @@ import pro.butovanton.fitnes2.net.Convertor
 import pro.butovanton.fitnes2.net.retrofitDataClass.AlertResponse
 import pro.butovanton.fitnes2.utils.AndPermissionHelper.Utils
 import pro.butovanton.fitnes2.utils.Logs
+import java.util.*
 
 class MService : Service() {
 
@@ -80,6 +82,10 @@ class MService : Service() {
         jobSendData = GlobalScope.launch(Dispatchers.IO) {
             val convertor = Convertor()
             while (true) {
+                    var countSend = 0
+                    if (dao.getLastData() == null)
+                        generateZero()
+                    var timeStartSend = Date().time
                     while (dao.getLastData() != null) {
                         val data = dao.getLastData()
                         if (data?.device.equals("")) dao.deleteLast()
@@ -88,6 +94,7 @@ class MService : Service() {
                         val responseTimeOut = api.postDetail(convertor.toRetrofit(data!!))
                         if (responseTimeOut != 99L) {
                             Logs.d("Данные отправлены.")
+                            countSend ++
                             outServerAvial(true)
                             timeOutOnSendData = responseTimeOut
                             dao.deleteLast()
@@ -95,15 +102,27 @@ class MService : Service() {
                         else {
                             outServerAvial(false)
                             Logs.d("Отправить не удалось.")
-                            delay(10000)
+                            //delay(10000)
                         }
-
                     }}
-                    delay(timeOutOnSendData * 60000)
+                    var tineEndSend = Date().time
+                    Logs.d("Отправлено " + countSend + " пакетов.")
+                    val timeSend = tineEndSend - timeStartSend
+                    Logs.d("Время отправки " + timeSend)
+                    delay(timeOutOnSendData * 60000 - timeSend)
             }
         }
 
         startForeground(101, updateNotification(baseContext))
+    }
+
+    private suspend fun generateZero() {
+        val location = locationClass.getLocation()
+        data.add(location)
+        val health : HealthyDataResult? = null
+        data.add(health)
+        dao.insertLast(data.getMOdelToRoom())
+        Logs.d("Данных для отправки нет генерируем 0")
     }
 
     fun baseJob(): Job {
@@ -115,13 +134,10 @@ class MService : Service() {
                     Logs.d("Location = " + location)
                     data.add(location)
                     Logs.d("Начало получения даных с часов.")
-                    val health = deviceClass.getHealthSuspend()
-                    health?.let {
-                        //analise this
-                        data.add(it)
-                        dao.insertLast(data.getMOdelToRoom())
-                        Logs.d("Данные записаны в БД " + it.toString())
-                    }
+                    var health = deviceClass.getHealthSuspend()
+                    data.add(health)
+                    dao.insertLast(data.getMOdelToRoom())
+                    Logs.d("Данные записаны в БД " + health.toString())
             delay(timeOutOnSendData * 60000)
             }
         }
@@ -222,11 +238,13 @@ private fun updateNotification(context: Context): Notification? {
          GlobalScope.launch {
              startActivity(Intent(this@MService,AllertActivity::class.java))
              Logs.d("Показ аллертов 1")
-             delay(6000)
+             delay(60000)
+             startActivity(Intent(this@MService,AllertActivity::class.java))
              Logs.d("Показ аллертов 2")
-             delay(6000)
+             delay(60000)
+             startActivity(Intent(this@MService,AllertActivity::class.java))
              Logs.d("Показ аллертов 3")
-             delay(6000)
+             delay(60000)
          }
      }
 }

@@ -101,8 +101,8 @@ class HomeFragment : Fragment() {
                                        activity?.finish()
                                    }
                                })
-                               .setCancelable(false)
                                .create()
+                           dialogFinishWork.setCancelable(false)
                            dialogFinishWork.show()
                        }
                         Shift.SHIFTONN -> {
@@ -122,6 +122,7 @@ class HomeFragment : Fragment() {
                                     }
                                 })
                                 .create()
+                            dialogFinishWork.setCancelable(false)
                             dialogFinishWork.show()
                         }
                     }

@@ -4,6 +4,7 @@ import android.location.Location
 import android.location.LocationManager
 import com.htsmart.wristband2.bean.HealthyDataResult
 import pro.butovanton.fitnes2.App
+import pro.butovanton.fitnes2.utils.Logs
 import java.util.*
 
 class DataClass () {
@@ -25,8 +26,14 @@ class DataClass () {
         this.location = location
     }
 
-    fun add(health: HealthyDataResult) {
-        this.health = health
+    fun add(health: HealthyDataResult?) {
+        if (health == null)
+            this.health = zeroHealthyData()
+        else
+            if (health.temperatureWrist < 30)
+                this.health = zeroHealthyData()
+            else
+                this.health = health
     }
 
     fun getMOdelToRoom(): Data {
@@ -44,11 +51,27 @@ class DataClass () {
             pressureSystol = health.systolicPressure,
             oxygen = health.oxygen,
             sugar = 0F,
-            temperature = health.temperatureBody,
+            temperaturebody = health.temperatureBody,
+            temperaturewrist = health.temperatureWrist,
             breathung = 0,
             respiratoryRate = health.respiratoryRate,
             latitude = location?.latitude,
             longitude = location?.longitude
         )
     }
+
+    private fun zeroHealthyData() : HealthyDataResult {
+        health = HealthyDataResult()
+        health.respiratoryRate = 0
+        health.diastolicPressure = 0
+        health.systolicPressure = 0
+        health.temperatureWrist = 0F
+        health.temperatureBody = 0F
+        health.heartRate = 0
+        health.oxygen = 0
+        Logs.d("Добавляем 0")
+    return health
+    }
+
+
 }
